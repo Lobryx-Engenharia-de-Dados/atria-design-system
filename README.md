@@ -47,6 +47,14 @@ texto usa `--color-foreground` (com variantes `--color-foreground-secondary`,
 `--color-foreground-muted`, `--color-accent-foreground` e `--color-inverse`), e
 estados/gráficos são sensíveis ao tema.
 
+### Tokens adicionados na Fase 1.6
+
+| Token | Dark (`:root`) | Light (`[data-theme="light"]`) |
+| --- | --- | --- |
+| `--color-primary-light` | `#0f1d3d` | `#f1f5f9` |
+| `--color-foreground-on-dark` | `#ffffff` | `#ffffff` (invariante) |
+| `--color-foreground-on-dark-muted` | `rgba(255, 255, 255, 0.7)` | `rgba(255, 255, 255, 0.7)` (invariante) |
+
 ## Consumo
 
 Instale ou vincule o pacote localmente com `link:../../design-system` e importe os

@@ -10,8 +10,11 @@
   --_ds-foreground: #ffffff;
   --_ds-foreground-secondary: #c0c6da;
   --_ds-foreground-muted: #8a96b8;
+  --_ds-foreground-on-dark: #ffffff;
+  --_ds-foreground-on-dark-muted: rgba(255, 255, 255, 0.7);
   --_ds-accent-foreground: #010a26;
   --_ds-inverse: #010a26;
+  --_ds-primary-light: #0f1d3d;
   --_ds-accent: #ff8700;
   --_ds-accent-hover: #ffa333;
   --_ds-brand-navy: #010a26;
@@ -47,6 +50,7 @@
   --_ds-foreground-muted: #64748b;
   --_ds-accent-foreground: #010a26;
   --_ds-inverse: #ffffff;
+  --_ds-primary-light: #f1f5f9;
   --_ds-accent: #ff8700;
   --_ds-accent-hover: #e07600;
   --_ds-brand-navy: #010a26;
@@ -79,9 +83,12 @@
   --color-foreground: var(--_ds-foreground);
   --color-foreground-secondary: var(--_ds-foreground-secondary);
   --color-foreground-muted: var(--_ds-foreground-muted);
+  --color-foreground-on-dark: var(--_ds-foreground-on-dark);
+  --color-foreground-on-dark-muted: var(--_ds-foreground-on-dark-muted);
   --color-accent-foreground: var(--_ds-accent-foreground);
   --color-inverse: var(--_ds-inverse);
   --color-primary: var(--_ds-brand-navy);
+  --color-primary-light: var(--_ds-primary-light);
   --color-accent: var(--_ds-accent);
   --color-accent-hover: var(--_ds-accent-hover);
   --color-brand-navy: var(--_ds-brand-navy);

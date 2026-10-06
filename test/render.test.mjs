@@ -22,6 +22,7 @@ assert.match(markup, /Revenue/);
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
   '--color-background', '--color-surface', '--color-primary', '--color-foreground',
+  '--color-primary-light', '--color-foreground-on-dark', '--color-foreground-on-dark-muted',
   '--color-accent-foreground', '--color-inverse', '--color-status-success',
   '--color-chart-1', '--radius-lg', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
@@ -41,3 +42,7 @@ for (const token of [
 }
 assert.match(darkTheme, /--_ds-background: #010a26/);
 assert.match(lightTheme, /--_ds-background: #fafafa/);
+assert.match(darkTheme, /--_ds-primary-light: #0f1d3d/);
+assert.match(lightTheme, /--_ds-primary-light: #f1f5f9/);
+assert.match(darkTheme, /--_ds-foreground-on-dark: #ffffff/);
+assert.match(darkTheme, /--_ds-foreground-on-dark-muted: rgba\(255, 255, 255, 0\.7\)/);
