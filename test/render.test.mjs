@@ -23,7 +23,7 @@ const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8
 for (const token of [
   '--color-background', '--color-surface', '--color-primary', '--color-foreground',
   '--color-primary-light', '--color-foreground-on-dark', '--color-foreground-on-dark-muted',
-  '--color-accent-foreground', '--color-inverse', '--color-status-success',
+  '--color-accent-foreground', '--color-accent-text', '--color-inverse', '--color-status-success',
   '--color-chart-1', '--radius-lg', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
 ]) {
@@ -35,7 +35,7 @@ assert.match(darkTheme, /color-scheme: dark/);
 assert.match(lightTheme, /color-scheme: light/);
 for (const token of [
   '--_ds-background', '--_ds-surface', '--_ds-border', '--_ds-foreground',
-  '--_ds-accent', '--_ds-status-success', '--_ds-status-success-bg', '--_ds-chart-1'
+  '--_ds-accent', '--_ds-accent-text', '--_ds-status-success', '--_ds-status-success-bg', '--_ds-chart-1'
 ]) {
   assert.match(darkTheme, new RegExp(`${token}:`));
   assert.match(lightTheme, new RegExp(`${token}:`));
@@ -46,3 +46,5 @@ assert.match(darkTheme, /--_ds-primary-light: #0f1d3d/);
 assert.match(lightTheme, /--_ds-primary-light: #f1f5f9/);
 assert.match(darkTheme, /--_ds-foreground-on-dark: #ffffff/);
 assert.match(darkTheme, /--_ds-foreground-on-dark-muted: rgba\(255, 255, 255, 0\.7\)/);
+assert.match(darkTheme, /--_ds-accent-text: #ff8700/);
+assert.match(lightTheme, /--_ds-accent-text: #c2410c/);

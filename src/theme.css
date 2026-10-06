@@ -16,6 +16,7 @@
   --_ds-inverse: #010a26;
   --_ds-primary-light: #0f1d3d;
   --_ds-accent: #ff8700;
+  --_ds-accent-text: #ff8700;
   --_ds-accent-hover: #ffa333;
   --_ds-brand-navy: #010a26;
   --_ds-status-success: #4ade80;
@@ -52,6 +53,7 @@
   --_ds-inverse: #ffffff;
   --_ds-primary-light: #f1f5f9;
   --_ds-accent: #ff8700;
+  --_ds-accent-text: #c2410c;
   --_ds-accent-hover: #e07600;
   --_ds-brand-navy: #010a26;
   --_ds-status-success: #15803d;
@@ -90,6 +92,7 @@
   --color-primary: var(--_ds-brand-navy);
   --color-primary-light: var(--_ds-primary-light);
   --color-accent: var(--_ds-accent);
+  --color-accent-text: var(--_ds-accent-text);
   --color-accent-hover: var(--_ds-accent-hover);
   --color-brand-navy: var(--_ds-brand-navy);
   --color-status-success: var(--_ds-status-success);

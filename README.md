@@ -55,6 +55,16 @@ estados/gráficos são sensíveis ao tema.
 | `--color-foreground-on-dark` | `#ffffff` | `#ffffff` (invariante) |
 | `--color-foreground-on-dark-muted` | `rgba(255, 255, 255, 0.7)` | `rgba(255, 255, 255, 0.7)` (invariante) |
 
+### Token adicionado na Fase 1.8
+
+| Token | Dark (`:root`) | Light (`[data-theme="light"]`) |
+| --- | --- | --- |
+| `--color-accent-text` | `#ff8700` | `#c2410c` |
+
+Use `--color-accent-text` para texto de acento. O token mantém o laranja de marca
+no tema dark e usa um laranja mais escuro no tema light para atender WCAG AA sobre
+`--color-background` e `--color-surface`.
+
 ## Consumo
 
 Instale ou vincule o pacote localmente com `link:../../design-system` e importe os
