@@ -65,6 +65,20 @@ Use `--color-accent-text` para texto de acento. O token mantém o laranja de mar
 no tema dark e usa um laranja mais escuro no tema light para atender WCAG AA sobre
 `--color-background` e `--color-surface`.
 
+### Tokens adicionados na Fase 1.9
+
+Os tokens `--color-status-*-foreground` são foregrounds para fundos sólidos de
+status (botões e chips preenchidos). São sensíveis ao tema: usam `#010a26` no
+dark, sobre os status claros, e `#ffffff` no light, sobre os status escuros,
+mantendo contraste WCAG AA (mínimo de 4,5:1).
+
+| Token | Dark (`:root`) | Light (`[data-theme="light"]`) |
+| --- | --- | --- |
+| `--color-status-success-foreground` | `#010a26` | `#ffffff` |
+| `--color-status-warning-foreground` | `#010a26` | `#ffffff` |
+| `--color-status-error-foreground` | `#010a26` | `#ffffff` |
+| `--color-status-info-foreground` | `#010a26` | `#ffffff` |
+
 ## Consumo
 
 Instale ou vincule o pacote localmente com `link:../../design-system` e importe os
