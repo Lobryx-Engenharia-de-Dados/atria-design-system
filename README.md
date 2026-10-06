@@ -43,7 +43,9 @@ ativado no elemento raiz com `data-theme="light"`:
 
 Além das cores, o contrato inclui `--radius-*`, `--space-*`, `--shadow-*`, `--font-*`,
 `--duration-*` e `--ease-*`. A marca é `--color-primary`/`--color-brand-navy`;
-texto usa `--color-text-primary`, e estados/gráficos são sensíveis ao tema.
+texto usa `--color-foreground` (com variantes `--color-foreground-secondary`,
+`--color-foreground-muted`, `--color-accent-foreground` e `--color-inverse`), e
+estados/gráficos são sensíveis ao tema.
 
 ## Consumo
 

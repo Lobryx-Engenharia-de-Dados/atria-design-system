@@ -21,8 +21,8 @@ assert.match(markup, /Revenue/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
-  '--color-background', '--color-surface', '--color-primary', '--color-text-primary',
-  '--color-text-on-accent', '--color-text-inverse', '--color-status-success',
+  '--color-background', '--color-surface', '--color-primary', '--color-foreground',
+  '--color-accent-foreground', '--color-inverse', '--color-status-success',
   '--color-chart-1', '--radius-lg', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
 ]) {
@@ -33,7 +33,7 @@ const lightTheme = theme.match(/\[data-theme='light'\]\s*\{([\s\S]*?)\n\}/)?.[1]
 assert.match(darkTheme, /color-scheme: dark/);
 assert.match(lightTheme, /color-scheme: light/);
 for (const token of [
-  '--_ds-background', '--_ds-surface', '--_ds-border', '--_ds-text-primary',
+  '--_ds-background', '--_ds-surface', '--_ds-border', '--_ds-foreground',
   '--_ds-accent', '--_ds-status-success', '--_ds-status-success-bg', '--_ds-chart-1'
 ]) {
   assert.match(darkTheme, new RegExp(`${token}:`));
