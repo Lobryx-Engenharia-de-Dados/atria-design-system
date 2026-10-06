@@ -12,8 +12,8 @@ export function KpiCard({ label, value, delta, className = '' }: KpiCardProps) {
   return (
     <Card className={className}>
       <p className="m-0 text-sm font-medium text-text-muted">{label}</p>
-      <p className="mt-2 font-heading text-2xl font-bold text-text-main">{value}</p>
-      {delta !== undefined && <p className="mt-2 text-sm text-text-muted-strong">{delta}</p>}
+      <p className="mt-2 font-headings text-2xl font-bold text-text-primary">{value}</p>
+      {delta !== undefined && <p className="mt-2 text-sm text-text-secondary">{delta}</p>}
     </Card>
   );
 }

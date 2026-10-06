@@ -31,9 +31,32 @@ export function Dashboard() {
 }
 ```
 
-## Paleta & Tokens
-- **Base / Primary:** Navy Dark `#010a26`
-- **Acento / Accent:** `#ff8700`
-- **Tipografia:** Headings `Poppins`, UI/Body `Inter`
-- **Foco:** `2px solid #ff8700`
-- **Acessibilidade:** WCAG 2.1 AA/AAA
+## Contrato canônico
+
+O pacote publica somente tokens semânticos `--color-*` na camada `@theme`; os valores
+primitivos são internos (`--_ds-*`). O tema dark é o padrão em `:root` e o light é
+ativado no elemento raiz com `data-theme="light"`:
+
+```html
+<html data-theme="light">
+```
+
+Além das cores, o contrato inclui `--radius-*`, `--space-*`, `--shadow-*`, `--font-*`,
+`--duration-*` e `--ease-*`. A marca é `--color-primary`/`--color-brand-navy`;
+texto usa `--color-text-primary`, e estados/gráficos são sensíveis ao tema.
+
+## Consumo
+
+Instale ou vincule o pacote localmente com `link:../../design-system` e importe os
+tokens no CSS da aplicação:
+
+```css
+@import "tailwindcss";
+@import "@lobryx/design-system/theme.css";
+```
+
+Componentes são importados do entrypoint:
+
+```tsx
+import { Button, Badge, Card, KpiCard } from "@lobryx/design-system";
+```
