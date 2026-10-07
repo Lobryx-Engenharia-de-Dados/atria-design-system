@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Badge, Button, Card, KpiCard } from '../dist/index.js';
+import { Badge, Button, Card, KpiCard, Skeleton } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -10,7 +10,8 @@ const markup = renderToStaticMarkup(
     null,
     React.createElement(Button, { variant: 'primary' }, 'Save'),
     React.createElement(Badge, { status: 'success' }, 'Healthy'),
-    React.createElement(KpiCard, { label: 'Revenue', value: '$100' })
+    React.createElement(KpiCard, { label: 'Revenue', value: '$100' }),
+    React.createElement(Skeleton, { className: 'h-4 w-32' })
   )
 );
 
@@ -18,6 +19,9 @@ assert.match(markup, /Save/);
 assert.match(markup, /bg-accent/);
 assert.match(markup, /Healthy/);
 assert.match(markup, /Revenue/);
+assert.match(markup, /aria-hidden="true"/);
+assert.match(markup, /animate-pulse/);
+assert.match(markup, /bg-\[var\(--color-surface-elevated\)\]/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [

@@ -6,3 +6,5 @@ export { Card } from './Card.js';
 export type { CardProps } from './Card.js';
 export { KpiCard } from './KpiCard.js';
 export type { KpiCardProps } from './KpiCard.js';
+export { Skeleton } from './Skeleton.js';
+export type { SkeletonProps } from './Skeleton.js';

@@ -18,7 +18,7 @@ No seu arquivo `src/index.css` ou `src/styles.css`:
 ### 2. Consumir Componentes Atômicos
 
 ```tsx
-import { Button, Badge, Card, KpiCard } from "@lobryx/design-system";
+import { Button, Badge, Card, KpiCard, Skeleton } from "@lobryx/design-system";
 
 export function Dashboard() {
   return (
@@ -26,10 +26,20 @@ export function Dashboard() {
       <KpiCard label="Receita" value="R$ 15.000" change="+12%" changeType="positive" />
       <Badge variant="success">Online</Badge>
       <Button variant="primary">Acessar</Button>
+      <Skeleton className="h-4 w-32" />
     </Card>
   );
 }
 ```
+
+### Catálogo de átomos
+
+- `Button`: ação interativa com variantes semânticas.
+- `Badge`: indicador de status.
+- `Card`: contêiner de superfície.
+- `KpiCard`: cartão de indicador-chave.
+- `Skeleton`: placeholder decorativo de carregamento. A região que o contém
+  deve expor `aria-busy` e a mensagem acessível.
 
 ## Contrato canônico
 
