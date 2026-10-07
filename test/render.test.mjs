@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Badge, Button, Card, KpiCard, Skeleton } from '../dist/index.js';
+import { AuthCard, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -15,6 +15,14 @@ const markup = renderToStaticMarkup(
   )
 );
 
+const authMarkup = renderToStaticMarkup(React.createElement(
+  AuthCard,
+  { brand: 'Brand', title: 'Sign in', subtitle: 'Welcome', footer: 'Footer' },
+  React.createElement(TextField, { id: 'email', label: 'Email', error: 'Required' }),
+  React.createElement(PasswordField, { id: 'password', label: 'Password', showLabel: 'Show password', hideLabel: 'Hide password' }),
+  React.createElement(ErrorAlert, null, 'Unable to sign in')
+));
+
 assert.match(markup, /Save/);
 assert.match(markup, /bg-accent/);
 assert.match(markup, /Healthy/);
@@ -22,6 +30,14 @@ assert.match(markup, /Revenue/);
 assert.match(markup, /aria-hidden="true"/);
 assert.match(markup, /animate-pulse/);
 assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
+assert.match(authMarkup, /Sign in/);
+assert.match(authMarkup, /aria-invalid="true"/);
+assert.match(authMarkup, /aria-describedby="email-error"/);
+assert.match(authMarkup, /role="alert"/);
+assert.match(authMarkup, /type="password"/);
+assert.match(authMarkup, /aria-label="Show password"/);
+assert.match(authMarkup, /<button type="button"[^>]*aria-label="Show password"/);
+assert.match(authMarkup, /<svg aria-hidden="true"/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
