@@ -16,3 +16,5 @@ export { PasswordField } from './PasswordField.js';
 export type { PasswordFieldProps } from './PasswordField.js';
 export { ErrorAlert } from './ErrorAlert.js';
 export type { ErrorAlertProps } from './ErrorAlert.js';
+export { AuthSubmitButton } from './AuthSubmitButton.js';
+export type { AuthSubmitButtonProps } from './AuthSubmitButton.js';

@@ -28,9 +28,9 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(fu
 
   return (
     <div className="space-y-2">
-      {label && <label className="block text-xs font-semibold uppercase tracking-wider text-foreground-secondary" htmlFor={fieldId}>{label}</label>}
-      <div className="relative">
-        {icon && <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-foreground-muted">{icon}</span>}
+      {label && <label className="block text-xs font-black uppercase tracking-widest text-foreground/70 ml-1" htmlFor={fieldId}>{label}</label>}
+      <div className="relative group">
+        {icon && <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted group-focus-within:text-accent-text transition-colors">{icon}</span>}
         <input
           {...props}
           ref={ref}
@@ -38,18 +38,18 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(fu
           type={visible ? 'text' : 'password'}
           aria-invalid={error ? true : props['aria-invalid']}
           aria-describedby={ariaDescribedBy}
-          className={`min-h-11 w-full rounded-md border border-border bg-surface-elevated px-3 pr-11 text-foreground outline-none transition-colors duration-normal ease-standard placeholder:text-foreground-muted focus-visible:border-border-focus focus-visible:ring-2 focus-visible:ring-border-focus/30 ${icon ? 'pl-10' : ''} ${error ? 'border-status-error' : ''} ${className}`}
+          className={`w-full bg-surface border-2 rounded-xl pl-12 pr-10 py-3.5 text-sm text-foreground font-medium placeholder:text-foreground-muted/60 focus:outline-none focus:ring-4 transition-all shadow-sm ${error ? 'border-status-error-border focus:border-status-error-border focus:ring-status-error/10' : 'border-border focus:border-accent focus:ring-accent/10'} ${className}`}
         />
         <button
           type="button"
-          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-foreground-muted transition-colors duration-fast hover:text-foreground focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-[-2px]"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-accent-text focus:outline-none transition-colors"
           aria-label={visible ? hideLabel : showLabel}
           onClick={() => setVisible((current) => !current)}
         >
           <EyeIcon crossed={visible} />
         </button>
       </div>
-      {error && <p id={errorId} className="text-sm text-status-error" role="alert">{error}</p>}
+      {error && <p id={errorId} className="text-[10px] text-status-error font-bold uppercase tracking-tight ml-1" role="alert">{error}</p>}
     </div>
   );
 });
