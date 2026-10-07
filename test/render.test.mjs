@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AuthCard, AuthSubmitButton, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField } from '../dist/index.js';
+import { AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -24,6 +24,21 @@ const authMarkup = renderToStaticMarkup(React.createElement(
   React.createElement(AuthSubmitButton, { loading: true, loadingText: 'Signing in' }, 'Sign in')
 ));
 
+const authHeaderMarkup = renderToStaticMarkup(React.createElement(
+  AuthHeader,
+  { brand: React.createElement('span', null, 'Brand'), platformName: 'Platform' }
+));
+const authFooterMarkup = renderToStaticMarkup(React.createElement(
+  AuthFooter,
+  {
+    links: [
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms', href: '/terms' }
+    ]
+  },
+  React.createElement('button', { type: 'button' }, 'Setup')
+));
+
 assert.match(markup, /Save/);
 assert.match(markup, /bg-accent/);
 assert.match(markup, /Healthy/);
@@ -41,6 +56,15 @@ assert.match(authMarkup, /<button type="button"[^>]*aria-label="Show password"/)
 assert.match(authMarkup, /<svg aria-hidden="true"/);
 assert.match(authMarkup, /bg-primary/);
 assert.match(authMarkup, /Signing in/);
+assert.match(authHeaderMarkup, /flex flex-col items-center text-center space-y-4/);
+assert.match(authHeaderMarkup, /text-foreground-on-dark-muted/);
+assert.match(authHeaderMarkup, /Brand/);
+assert.match(authHeaderMarkup, /Platform/);
+assert.match(authFooterMarkup, /pt-8 border-t border-border\/50 flex flex-col items-center gap-6/);
+assert.match(authFooterMarkup, /href="\/privacy"/);
+assert.match(authFooterMarkup, /href="\/terms"/);
+assert.match(authFooterMarkup, /bg-border rounded-full/);
+assert.match(authFooterMarkup, /Setup/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [

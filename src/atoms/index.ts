@@ -18,3 +18,7 @@ export { ErrorAlert } from './ErrorAlert.js';
 export type { ErrorAlertProps } from './ErrorAlert.js';
 export { AuthSubmitButton } from './AuthSubmitButton.js';
 export type { AuthSubmitButtonProps } from './AuthSubmitButton.js';
+export { AuthHeader } from './AuthHeader.js';
+export type { AuthHeaderProps } from './AuthHeader.js';
+export { AuthFooter } from './AuthFooter.js';
+export type { AuthFooterLink, AuthFooterProps } from './AuthFooter.js';
