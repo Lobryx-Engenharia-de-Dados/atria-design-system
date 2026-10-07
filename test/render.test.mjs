@@ -21,11 +21,11 @@ assert.match(markup, /Healthy/);
 assert.match(markup, /Revenue/);
 assert.match(markup, /aria-hidden="true"/);
 assert.match(markup, /animate-pulse/);
-assert.match(markup, /bg-\[var\(--color-surface-elevated\)\]/);
+assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
-  '--color-background', '--color-surface', '--color-primary', '--color-foreground',
+  '--color-background', '--color-surface', '--color-skeleton', '--color-primary', '--color-foreground',
   '--color-primary-light', '--color-foreground-on-dark', '--color-foreground-on-dark-muted',
   '--color-accent-foreground', '--color-accent-text', '--color-inverse', '--color-status-success',
   '--color-status-success-foreground', '--color-status-warning-foreground',
@@ -37,10 +37,12 @@ for (const token of [
 }
 const darkTheme = theme.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
 const lightTheme = theme.match(/\[data-theme='light'\]\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+assert.match(darkTheme, /--_ds-skeleton: #334a9c/);
+assert.match(lightTheme, /--_ds-skeleton: #cbd5e1/);
 assert.match(darkTheme, /color-scheme: dark/);
 assert.match(lightTheme, /color-scheme: light/);
 for (const token of [
-  '--_ds-background', '--_ds-surface', '--_ds-border', '--_ds-foreground',
+  '--_ds-background', '--_ds-surface', '--_ds-skeleton', '--_ds-border', '--_ds-foreground',
   '--_ds-accent', '--_ds-accent-text', '--_ds-status-success', '--_ds-status-success-foreground',
   '--_ds-status-warning-foreground', '--_ds-status-error-foreground', '--_ds-status-info-foreground',
   '--_ds-status-success-bg', '--_ds-chart-1'

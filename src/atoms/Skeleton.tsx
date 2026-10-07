@@ -11,7 +11,7 @@ export function Skeleton({ className = '' }: SkeletonProps) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-block animate-pulse rounded-[var(--radius-sm)] bg-[var(--color-surface-elevated)] ${className}`}
+      className={`inline-block animate-pulse rounded-[var(--radius-sm)] bg-[var(--color-skeleton)] ${className}`}
     />
   );
 }

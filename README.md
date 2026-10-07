@@ -89,6 +89,17 @@ mantendo contraste WCAG AA (mínimo de 4,5:1).
 | `--color-status-error-foreground` | `#010a26` | `#ffffff` |
 | `--color-status-info-foreground` | `#010a26` | `#ffffff` |
 
+### Token adicionado na Fase 1.10
+
+`--color-skeleton` é o preenchimento theme-aware do `Skeleton`. Use o token público
+para manter placeholders visualmente discerníveis das superfícies:
+
+| Token | Dark (`:root`) | Light (`[data-theme="light"]`) |
+| --- | --- | --- |
+| `--color-skeleton` | `#334a9c` | `#cbd5e1` |
+
+O valor primitivo interno correspondente é `--_ds-skeleton`.
+
 ## Consumo
 
 Instale ou vincule o pacote localmente com `link:../../design-system` e importe os

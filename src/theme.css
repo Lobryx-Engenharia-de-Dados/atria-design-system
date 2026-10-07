@@ -5,6 +5,7 @@
   --_ds-background: #010a26;
   --_ds-surface: #0a1230;
   --_ds-surface-elevated: #141e45;
+  --_ds-skeleton: #334a9c;
   --_ds-border: #1e2c5e;
   --_ds-border-focus: #ff8700;
   --_ds-foreground: #ffffff;
@@ -48,6 +49,7 @@
   --_ds-background: #fafafa;
   --_ds-surface: #f8fafc;
   --_ds-surface-elevated: #f1f5f9;
+  --_ds-skeleton: #cbd5e1;
   --_ds-border: #e2e8f0;
   --_ds-border-focus: #ff8700;
   --_ds-foreground: #010a26;
@@ -88,6 +90,7 @@
   --color-background: var(--_ds-background);
   --color-surface: var(--_ds-surface);
   --color-surface-elevated: var(--_ds-surface-elevated);
+  --color-skeleton: var(--_ds-skeleton);
   --color-border: var(--_ds-border);
   --color-border-focus: var(--_ds-border-focus);
   --color-foreground: var(--_ds-foreground);
