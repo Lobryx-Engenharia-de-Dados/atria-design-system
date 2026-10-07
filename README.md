@@ -96,7 +96,10 @@ para manter placeholders visualmente discerníveis das superfícies:
 
 | Token | Dark (`:root`) | Light (`[data-theme="light"]`) |
 | --- | --- | --- |
-| `--color-skeleton` | `#334a9c` | `#cbd5e1` |
+| `--color-skeleton` | `#4b61ad` | `#8292a9` |
+
+Os valores são os mais leves (menos pesados) que mantêm contraste mínimo de 3:1
+com `--color-surface` e `--color-background` em cada tema.
 
 O valor primitivo interno correspondente é `--_ds-skeleton`.
 

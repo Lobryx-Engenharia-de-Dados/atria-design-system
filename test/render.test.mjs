@@ -37,8 +37,8 @@ for (const token of [
 }
 const darkTheme = theme.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
 const lightTheme = theme.match(/\[data-theme='light'\]\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
-assert.match(darkTheme, /--_ds-skeleton: #334a9c/);
-assert.match(lightTheme, /--_ds-skeleton: #cbd5e1/);
+assert.match(darkTheme, /--_ds-skeleton: #4b61ad/);
+assert.match(lightTheme, /--_ds-skeleton: #8292a9/);
 assert.match(darkTheme, /color-scheme: dark/);
 assert.match(lightTheme, /color-scheme: light/);
 for (const token of [
@@ -82,4 +82,15 @@ for (const themeBlock of [darkTheme, lightTheme]) {
     assert.ok(contrast(foreground, background) >= 4.5,
       `${status} status foreground contrast must meet AA`);
   }
+}
+
+for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
+  const skeleton = parseHex(themeBlock, '--_ds-skeleton');
+  const surface = parseHex(themeBlock, '--_ds-surface');
+  const background = parseHex(themeBlock, '--_ds-background');
+  assert.ok(skeleton && surface && background);
+  assert.ok(contrast(skeleton, surface) >= 3,
+    `${name} skeleton contrast against surface must meet 3:1`);
+  assert.ok(contrast(skeleton, background) >= 3,
+    `${name} skeleton contrast against background must meet 3:1`);
 }
