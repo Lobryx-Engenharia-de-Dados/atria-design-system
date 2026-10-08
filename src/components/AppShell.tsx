@@ -21,7 +21,7 @@ export function AppShell({
 }: AppShellProps) {
   const sidebarRef = useRef<HTMLElement>(null);
   const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia?.(DESKTOP_MEDIA_QUERY).matches === true
+    () => typeof window === 'undefined' || window.matchMedia(DESKTOP_MEDIA_QUERY).matches
   );
 
   useEffect(() => {
