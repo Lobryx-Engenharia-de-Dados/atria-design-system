@@ -58,9 +58,7 @@ export function AppShell({
           <aside
             ref={sidebarRef}
             aria-label="Application navigation"
-            aria-hidden={sidebarInert}
-            inert={sidebarInert}
-            tabIndex={-1}
+            {...(sidebarInert ? { 'aria-hidden': true, inert: true, tabIndex: -1 } : {})}
             onKeyDown={handleSidebarKeyDown}
             className={`fixed inset-y-0 left-0 z-40 w-72 -translate-x-full transition-transform duration-slow ease-standard lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : ''}`}
           >
