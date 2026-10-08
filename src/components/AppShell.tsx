@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const DESKTOP_MEDIA_QUERY = '(min-width: 1024px)';
 
@@ -37,12 +37,19 @@ export function AppShell({
   }, []);
 
   useEffect(() => {
+    if (!sidebarOpen || typeof window === 'undefined') return;
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') onSidebarClose?.();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sidebarOpen, onSidebarClose]);
+
+  useEffect(() => {
     if (sidebarOpen) sidebarRef.current?.focus();
   }, [sidebarOpen]);
-
-  const handleSidebarKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === 'Escape') onSidebarClose?.();
-  };
   const sidebarInert = !isDesktop && !sidebarOpen;
 
   return (
@@ -52,15 +59,14 @@ export function AppShell({
           <button
             type="button"
             aria-label="Close navigation"
-            className={`fixed inset-0 z-30 bg-primary/40 backdrop-blur-sm lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}
+            className={`fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}
             onClick={onSidebarClose}
           />
           <aside
             ref={sidebarRef}
             aria-label="Application navigation"
             {...(sidebarInert ? { 'aria-hidden': true, inert: true, tabIndex: -1 } : {})}
-            onKeyDown={handleSidebarKeyDown}
-            className={`fixed inset-y-0 left-0 z-40 w-72 -translate-x-full transition-transform duration-slow ease-standard lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : ''}`}
+            className={`fixed inset-y-0 left-0 z-50 w-72 -translate-x-full transition-transform duration-slow ease-standard lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : ''}`}
           >
             {sidebar}
           </aside>
