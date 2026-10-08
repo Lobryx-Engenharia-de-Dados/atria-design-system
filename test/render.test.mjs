@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField } from '../dist/index.js';
+import { AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField, Wordmark } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -26,8 +26,9 @@ const authMarkup = renderToStaticMarkup(React.createElement(
 
 const authHeaderMarkup = renderToStaticMarkup(React.createElement(
   AuthHeader,
-  { brand: React.createElement('span', null, 'Brand'), platformName: 'Platform' }
+  { name: 'Brand', platformName: 'Platform' }
 ));
+const wordmarkMarkup = renderToStaticMarkup(React.createElement(Wordmark, { name: 'Nivra' }));
 const authFooterMarkup = renderToStaticMarkup(React.createElement(
   AuthFooter,
   {
@@ -59,7 +60,13 @@ assert.match(authMarkup, /Signing in/);
 assert.match(authHeaderMarkup, /flex flex-col items-center text-center space-y-4/);
 assert.match(authHeaderMarkup, /text-foreground-on-dark-muted/);
 assert.match(authHeaderMarkup, /Brand/);
+assert.match(authHeaderMarkup, /text-3xl/);
+assert.match(authHeaderMarkup, /text-accent/);
+assert.match(authHeaderMarkup, /aria-hidden="true"/);
 assert.match(authHeaderMarkup, /Platform/);
+assert.match(wordmarkMarkup, /Nivra/);
+assert.match(wordmarkMarkup, /text-accent/);
+assert.match(wordmarkMarkup, /aria-hidden="true"/);
 assert.match(authFooterMarkup, /pt-8 border-t border-border\/50 flex flex-col items-center gap-6/);
 assert.match(authFooterMarkup, /href="\/privacy"/);
 assert.match(authFooterMarkup, /href="\/terms"/);

@@ -20,5 +20,7 @@ export { AuthSubmitButton } from './AuthSubmitButton.js';
 export type { AuthSubmitButtonProps } from './AuthSubmitButton.js';
 export { AuthHeader } from './AuthHeader.js';
 export type { AuthHeaderProps } from './AuthHeader.js';
+export { Wordmark } from './Wordmark.js';
+export type { WordmarkProps } from './Wordmark.js';
 export { AuthFooter } from './AuthFooter.js';
 export type { AuthFooterLink, AuthFooterProps } from './AuthFooter.js';
