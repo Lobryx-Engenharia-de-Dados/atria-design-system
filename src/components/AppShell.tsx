@@ -1,4 +1,6 @@
-import { useEffect, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+
+const DESKTOP_MEDIA_QUERY = '(min-width: 1024px)';
 
 export interface AppShellProps {
   sidebar?: ReactNode;
@@ -18,6 +20,21 @@ export function AppShell({
   className = ''
 }: AppShellProps) {
   const sidebarRef = useRef<HTMLElement>(null);
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia?.(DESKTOP_MEDIA_QUERY).matches === true
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
+    const handleMediaQueryChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches);
+
+    setIsDesktop(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => mediaQuery.removeEventListener('change', handleMediaQueryChange);
+  }, []);
 
   useEffect(() => {
     if (sidebarOpen) sidebarRef.current?.focus();
@@ -26,6 +43,7 @@ export function AppShell({
   const handleSidebarKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Escape') onSidebarClose?.();
   };
+  const sidebarInert = !isDesktop && !sidebarOpen;
 
   return (
     <div className={`flex h-screen overflow-hidden bg-background text-foreground ${className}`}>
@@ -40,7 +58,8 @@ export function AppShell({
           <aside
             ref={sidebarRef}
             aria-label="Application navigation"
-            aria-hidden="false"
+            aria-hidden={sidebarInert}
+            inert={sidebarInert}
             tabIndex={-1}
             onKeyDown={handleSidebarKeyDown}
             className={`fixed inset-y-0 left-0 z-40 w-72 -translate-x-full transition-transform duration-slow ease-standard lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : ''}`}

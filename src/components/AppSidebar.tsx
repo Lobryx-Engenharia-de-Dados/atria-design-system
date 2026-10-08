@@ -17,7 +17,7 @@ export interface AppSidebarProps {
 
 export function AppSidebar({ brand, groups, items, footer, className = '' }: AppSidebarProps) {
   return (
-    <div className={`flex h-full min-h-0 flex-col bg-surface text-foreground ${className}`}>
+    <div className={`flex h-full min-h-0 flex-col border-r border-border bg-surface text-foreground ${className}`}>
       {brand && <div className="shrink-0 border-b border-border px-6 py-6">{brand}</div>}
       <nav aria-label="Primary navigation" className="min-h-0 flex-1 overflow-y-auto px-3 py-6">
         {groups}
