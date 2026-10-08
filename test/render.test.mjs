@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, ErrorAlert, KpiCard, PasswordField, Skeleton, TextField, Wordmark } from '../dist/index.js';
+import { AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Container, ErrorAlert, KpiCard, PageHeader, PasswordField, Skeleton, TextField, Wordmark } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -39,6 +39,11 @@ const authFooterMarkup = renderToStaticMarkup(React.createElement(
   },
   React.createElement('button', { type: 'button' }, 'Setup')
 ));
+const shellMarkup = renderToStaticMarkup(React.createElement(
+  AppShell,
+  { sidebarOpen: true, sidebar: React.createElement(AppSidebar, { brand: React.createElement(Wordmark, { name: 'Lobryx' }), items: [{ label: 'Home', href: '/', active: true }] }), topbar: React.createElement(AppTopbar, { title: 'Overview' }) },
+  React.createElement(Container, { size: 'lg' }, React.createElement(PageHeader, { eyebrow: 'Workspace', title: 'Overview', subtitle: 'Your activity' }))
+));
 
 assert.match(markup, /Save/);
 assert.match(markup, /bg-accent/);
@@ -72,6 +77,9 @@ assert.match(authFooterMarkup, /href="\/privacy"/);
 assert.match(authFooterMarkup, /href="\/terms"/);
 assert.match(authFooterMarkup, /bg-border rounded-full/);
 assert.match(authFooterMarkup, /Setup/);
+assert.match(shellMarkup, /flex h-screen overflow-hidden bg-background text-foreground/);
+assert.match(shellMarkup, /aria-current="page"/);
+assert.match(shellMarkup, /Open navigation/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
