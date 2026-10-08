@@ -13,9 +13,10 @@ export interface AppSidebarProps {
   items?: AppSidebarItem[];
   footer?: ReactNode;
   className?: string;
+  onNavigate?: () => void;
 }
 
-export function AppSidebar({ brand, groups, items, footer, className = '' }: AppSidebarProps) {
+export function AppSidebar({ brand, groups, items, footer, className = '', onNavigate }: AppSidebarProps) {
   return (
     <div className={`flex h-full min-h-0 flex-col border-r border-border bg-surface text-foreground ${className}`}>
       {brand && <div className="shrink-0 border-b border-border px-6 py-6">{brand}</div>}
@@ -27,6 +28,7 @@ export function AppSidebar({ brand, groups, items, footer, className = '' }: App
               <li key={item.href}>
                 <a
                   href={item.href}
+                  onClick={onNavigate}
                   aria-current={item.active ? 'page' : undefined}
                   className={`relative flex items-center gap-3 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 ${item.active ? 'border-accent bg-accent/10 text-accent' : 'border-transparent text-foreground-muted hover:bg-primary-light hover:text-foreground'}`}
                 >
