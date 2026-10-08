@@ -37,7 +37,7 @@ export function AppShell({
   }, []);
 
   useEffect(() => {
-    if (!sidebarOpen || typeof window === 'undefined') return;
+    if (!sidebarOpen || isDesktop || typeof window === 'undefined') return;
 
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') onSidebarClose?.();
@@ -45,7 +45,7 @@ export function AppShell({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sidebarOpen, onSidebarClose]);
+  }, [sidebarOpen, isDesktop, onSidebarClose]);
 
   useEffect(() => {
     if (sidebarOpen) sidebarRef.current?.focus();
