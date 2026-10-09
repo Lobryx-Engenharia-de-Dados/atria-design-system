@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Container, ErrorAlert, KpiCard, PageHeader, PasswordField, Skeleton, TextField, Wordmark } from '../dist/index.js';
+import { AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Container, DashboardGrid, EmptyState, ErrorAlert, ErrorState, Grid, KpiCard, LoadingState, PageHeader, PasswordField, Skeleton, Stack, Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Text, TextField, Wordmark } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -51,6 +51,21 @@ const renderShell = (matchMediaMatches, sidebarOpen) => {
 };
 const desktopShellMarkup = renderShell(true, false);
 const mobileClosedShellMarkup = renderShell(false, false);
+const layoutMarkup = renderToStaticMarkup(React.createElement(
+  Stack,
+  { gap: 2 },
+  React.createElement(Text, { variant: 'h2', tone: 'accent' }, 'Section'),
+  React.createElement(Grid, { columns: 1, mdColumns: 2 }, React.createElement('span', null, 'Grid item')),
+  React.createElement(DashboardGrid, null, React.createElement('span', null, 'Dashboard item')),
+  React.createElement(EmptyState, { title: 'Nothing here', description: 'Try another filter', action: React.createElement(Button, null, 'Create') }),
+  React.createElement(ErrorState, { title: 'Failed', description: 'Try again', retry: React.createElement(Button, null, 'Retry') }),
+  React.createElement(LoadingState, { message: 'Loading data' }),
+  React.createElement(Table, { density: 'compact' },
+    React.createElement(TableCaption, null, 'Data caption'),
+    React.createElement(TableHead, null, React.createElement(TableRow, null, React.createElement(TableHeaderCell, null, 'Name'))),
+    React.createElement(TableBody, null, React.createElement(TableRow, null, React.createElement(TableCell, null, 'Ada')))
+  )
+));
 
 assert.match(markup, /Save/);
 assert.match(markup, /bg-accent/);
@@ -90,6 +105,15 @@ assert.match(desktopShellMarkup, /Open navigation/);
 assert.doesNotMatch(desktopShellMarkup, /<aside[^>]*(?:aria-hidden|\binert\b)/);
 assert.match(mobileClosedShellMarkup, /<aside[^>]*aria-hidden="true"/);
 assert.match(mobileClosedShellMarkup, /<aside[^>]*\binert\b/);
+assert.match(layoutMarkup, /<h2[^>]*text-h2[^>]*>Section<\/h2>/);
+assert.match(layoutMarkup, /grid grid-cols-1[^>]*md:grid-cols-2/);
+assert.match(layoutMarkup, /<section[^>]*>.*Nothing here/);
+assert.match(layoutMarkup, /role="alert"/);
+assert.match(layoutMarkup, /aria-busy="true"/);
+assert.match(layoutMarkup, /Loading data/);
+assert.match(layoutMarkup, /<table[^>]*>/);
+assert.match(layoutMarkup, /<th scope="col"/);
+assert.match(layoutMarkup, /Data caption/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
 for (const token of [
