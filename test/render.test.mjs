@@ -57,8 +57,8 @@ const layoutMarkup = renderToStaticMarkup(React.createElement(
   React.createElement(Text, { variant: 'h2', tone: 'accent' }, 'Section'),
   React.createElement(Grid, { columns: 1, mdColumns: 2 }, React.createElement('span', null, 'Grid item')),
   React.createElement(DashboardGrid, null, React.createElement('span', null, 'Dashboard item')),
-  React.createElement(EmptyState, { title: 'Nothing here', description: 'Try another filter', action: React.createElement(Button, null, 'Create') }),
-  React.createElement(ErrorState, { title: 'Failed', description: 'Try again', retry: React.createElement(Button, null, 'Retry') }),
+  React.createElement(EmptyState, { title: 'Nothing here', description: 'Try another filter', action: { label: 'Create' } }),
+  React.createElement(ErrorState, { title: 'Failed', description: 'Try again', retry: { label: 'Retry', href: '/retry' } }),
   React.createElement(LoadingState, { message: 'Loading data' }),
   React.createElement(Table, { density: 'compact' },
     React.createElement(TableCaption, null, 'Data caption'),
@@ -108,6 +108,8 @@ assert.match(mobileClosedShellMarkup, /<aside[^>]*\binert\b/);
 assert.match(layoutMarkup, /<h2[^>]*text-h2[^>]*>Section<\/h2>/);
 assert.match(layoutMarkup, /grid grid-cols-1[^>]*md:grid-cols-2/);
 assert.match(layoutMarkup, /<section[^>]*>.*Nothing here/);
+assert.match(layoutMarkup, /<button[^>]*>Create<\/button>/);
+assert.match(layoutMarkup, /<a[^>]*href="\/retry"[^>]*>Retry<\/a>/);
 assert.match(layoutMarkup, /role="alert"/);
 assert.match(layoutMarkup, /aria-busy="true"/);
 assert.match(layoutMarkup, /Loading data/);

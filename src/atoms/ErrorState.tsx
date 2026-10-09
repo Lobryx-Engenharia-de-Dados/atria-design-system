@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
 import { ErrorAlert } from './ErrorAlert.js';
+import { Button } from './Button.js';
+import type { StateAction } from './StateAction.js';
 
 export interface ErrorStateProps {
   title: ReactNode;
   description?: ReactNode;
-  retry?: ReactNode;
+  retry?: StateAction;
   className?: string;
 }
 
@@ -17,7 +19,7 @@ export function ErrorState({ title, description, retry, className = '' }: ErrorS
           {description && <p className="mt-1 text-body">{description}</p>}
         </div>
       </ErrorAlert>
-      {retry && <div>{retry}</div>}
+      {retry && <div><Button href={retry.href} onClick={retry.onClick} disabled={retry.disabled}>{retry.label}</Button></div>}
     </section>
   );
 }

@@ -48,10 +48,11 @@ geradas a partir do tema. O contrato deve funcionar nos temas padrão dark e
 
 ### Eixo 3 — Estados
 
-- **Dado** um estado vazio, **quando** há ação configurada, **então** título,
-  descrição e ação são apresentados de forma acionável.
-- **Dado** um erro, **quando** há retry, **então** o estado tem alerta claro e
-  ação de nova tentativa.
+- **Dado** um estado vazio, **quando** há ação configurada como `StateAction`,
+  **então** título, descrição e um controle focável (`Button`, ou link quando
+  `href` é informado) são apresentados de forma acionável.
+- **Dado** um erro, **quando** há retry configurado como `StateAction`, **então**
+  o estado tem alerta claro e um controle focável de nova tentativa.
 - **Dado** um carregamento, **quando** renderizado, **então** a região possui
   `aria-busy="true"`, mensagem acessível e skeleton decorativo.
 
@@ -71,6 +72,8 @@ geradas a partir do tema. O contrato deve funcionar nos temas padrão dark e
 - Nenhuma cor, tamanho, espaçamento ou breakpoint arbitrário é introduzido;
   somente tokens do DS são permitidos.
 - O markup mantém semântica HTML e foco visível/acessível quando houver ação.
+- `EmptyState.action` e `ErrorState.retry` não aceitam nós livres: seus
+  `StateAction` sempre são renderizados pelo `Button` como `<button>` ou `<a>`.
 - Os temas dark e light continuam suportados sem seletores ou temas paralelos.
 - Loading é anunciado sem duplicar o conteúdo decorativo do `Skeleton`.
 
