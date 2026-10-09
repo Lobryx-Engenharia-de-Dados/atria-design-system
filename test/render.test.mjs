@@ -14,6 +14,12 @@ const markup = renderToStaticMarkup(
     React.createElement(Skeleton, { className: 'h-4 w-32' })
   )
 );
+const enabledLinkMarkup = renderToStaticMarkup(React.createElement(Button, { href: '/details' }, 'Details'));
+const disabledLinkMarkup = renderToStaticMarkup(React.createElement(
+  Button,
+  { href: '/details', disabled: true, onClick: () => { throw new Error('disabled link clicked'); } },
+  'Details'
+));
 
 const authMarkup = renderToStaticMarkup(React.createElement(
   AuthCard,
@@ -74,6 +80,9 @@ assert.match(markup, /Revenue/);
 assert.match(markup, /aria-hidden="true"/);
 assert.match(markup, /animate-pulse/);
 assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
+assert.match(enabledLinkMarkup, /<a[^>]*href="\/details"[^>]*>Details<\/a>/);
+assert.match(disabledLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*tabindex="-1"[^>]*>Details<\/a>/);
+assert.doesNotMatch(disabledLinkMarkup, /href="\/details"/);
 assert.match(authMarkup, /Header/);
 assert.match(authMarkup, /aria-invalid="true"/);
 assert.match(authMarkup, /aria-describedby="email-error"/);
