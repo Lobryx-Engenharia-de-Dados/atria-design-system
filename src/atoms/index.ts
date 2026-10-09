@@ -24,3 +24,5 @@ export { Wordmark } from './Wordmark.js';
 export type { WordmarkProps } from './Wordmark.js';
 export { AuthFooter } from './AuthFooter.js';
 export type { AuthFooterLink, AuthFooterProps } from './AuthFooter.js';
+export { Text } from './Text.js';
+export type { TextProps, TextTone, TextVariant } from './Text.js';
