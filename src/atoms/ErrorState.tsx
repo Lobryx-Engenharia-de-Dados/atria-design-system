@@ -15,7 +15,7 @@ export function ErrorState({ title, description, retry, className = '' }: ErrorS
     <section className={`flex flex-col gap-4 ${className}`}>
       <ErrorAlert>
         <div>
-          <h2 className="font-sans text-label font-semibold">{title}</h2>
+          <h2 className="font-sans text-label font-semibold normal-case tracking-normal">{title}</h2>
           {description && <p className="mt-1 text-body">{description}</p>}
         </div>
       </ErrorAlert>

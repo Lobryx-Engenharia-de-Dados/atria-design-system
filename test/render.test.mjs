@@ -115,6 +115,8 @@ assert.doesNotMatch(desktopShellMarkup, /<aside[^>]*(?:aria-hidden|\binert\b)/);
 assert.match(mobileClosedShellMarkup, /<aside[^>]*aria-hidden="true"/);
 assert.match(mobileClosedShellMarkup, /<aside[^>]*\binert\b/);
 assert.match(layoutMarkup, /<h2[^>]*text-h2[^>]*>Section<\/h2>/);
+assert.match(layoutMarkup, /<h2[^>]*normal-case[^>]*tracking-normal[^>]*>Nothing here<\/h2>/);
+assert.match(layoutMarkup, /<h2[^>]*normal-case[^>]*tracking-normal[^>]*>Failed<\/h2>/);
 assert.match(layoutMarkup, /grid grid-cols-1[^>]*md:grid-cols-2/);
 assert.match(layoutMarkup, /<section[^>]*>.*Nothing here/);
 assert.match(layoutMarkup, /<button[^>]*>Create<\/button>/);
