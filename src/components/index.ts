@@ -8,3 +8,5 @@ export { PageHeader } from './PageHeader.js';
 export type { PageHeaderProps } from './PageHeader.js';
 export { Container } from './Container.js';
 export type { ContainerProps, ContainerSize } from './Container.js';
+export { Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Td, Th } from './Table.js';
+export type { TableBodyProps, TableCaptionProps, TableCellProps, TableDensity, TableHeadProps, TableHeaderCellProps, TableProps, TableRowProps } from './Table.js';
