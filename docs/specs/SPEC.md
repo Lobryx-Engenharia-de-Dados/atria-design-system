@@ -79,6 +79,11 @@ geradas a partir do tema. O contrato deve funcionar nos temas padrão dark e
 
 ## Backlog e fora de escopo
 
-A **propagação aos cinco consumidores** (site, clari, edra, nivra e orvia) é a
-entrega seguinte e está explicitamente fora deste escopo. Esta entrega cobre
-somente a biblioteca canônica e seus testes de renderização.
+A **propagação aos cinco consumidores** (site, clari, edra, nivra e orvia) era a
+entrega seguinte e está explicitamente fora do escopo original deste documento,
+que cobria somente a biblioteca canônica e seus testes de renderização.
+
+Essa propagação, porém, exige elevar a lib à **paridade de API** com os
+primitivos que hoje vivem nos kits locais dos consumidores. A entrega está
+especificada em
+[DS Canônico — Paridade de API e Propagação aos Consumidores](ds-canonical-parity-and-propagation.md).
