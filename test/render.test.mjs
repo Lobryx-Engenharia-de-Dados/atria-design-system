@@ -294,11 +294,16 @@ for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
   const surface = parseHex(themeBlock, '--_ds-surface');
   const background = parseHex(themeBlock, '--_ds-background');
   const secondary = parseHex(themeBlock, '--_ds-foreground-secondary');
-  assert.ok(accentText && surface && background && secondary);
+  const muted = parseHex(themeBlock, '--_ds-foreground-muted');
+  assert.ok(accentText && surface && background && secondary && muted);
   assert.ok(contrast(accentText, surface) >= 4.5,
     `${name} accent text contrast against surface must meet AA`);
   assert.ok(contrast(accentText, background) >= 4.5,
     `${name} accent text contrast against background must meet AA`);
   assert.ok(contrast(secondary, surface) >= 4.5,
     `${name} AuthFooter link contrast against surface must meet AA`);
+  assert.ok(contrast(muted, surface) >= 4.5,
+    `${name} muted foreground contrast against surface must meet AA`);
+  assert.ok(contrast(muted, background) >= 4.5,
+    `${name} muted foreground contrast against background must meet AA`);
 }
