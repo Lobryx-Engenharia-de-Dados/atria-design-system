@@ -31,19 +31,20 @@ const sizeClasses: Record<ButtonSize, string> = {
 export function Button(props: ButtonProps) {
   const { className = '', variant = 'primary', size = 'md', loading = false, icon } = props;
   const classes = `inline-flex min-h-11 items-center justify-center gap-2 rounded-md font-sans font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
-  const content = <>{loading && <span className="animate-pulse">Loading</span>}{icon}{props.children}</>;
+  const content = <>{loading && <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current animate-pulse" />}{icon}{props.children}</>;
 
   if ('href' in props && props.href !== undefined) {
     const { href, disabled, onClick, className: _className, variant: _variant, size: _size, loading: _loading, icon: _icon, children: _children, ...anchorProps } = props;
+    const inert = Boolean(disabled || loading);
     return (
       <a
         className={classes}
-        href={disabled ? undefined : href}
-        aria-disabled={disabled || undefined}
-        tabIndex={disabled ? -1 : undefined}
+        href={inert ? undefined : href}
+        aria-disabled={inert || undefined}
+        tabIndex={inert ? -1 : undefined}
         aria-busy={loading || undefined}
         {...anchorProps}
-        onClick={disabled ? (event) => event.preventDefault() : onClick}
+        onClick={inert ? (event) => event.preventDefault() : onClick}
       >{content}</a>
     );
   }

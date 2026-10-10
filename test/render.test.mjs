@@ -20,6 +20,27 @@ const disabledLinkMarkup = renderToStaticMarkup(React.createElement(
   { href: '/details', disabled: true, onClick: () => { throw new Error('disabled link clicked'); } },
   'Details'
 ));
+const loadingLinkMarkup = renderToStaticMarkup(React.createElement(
+  Button,
+  { href: '/details', loading: true },
+  'Details'
+));
+const loadingLinkElement = Button({ href: '/details', loading: true, children: 'Details' });
+let loadingLinkPrevented = false;
+loadingLinkElement.props.onClick({ preventDefault: () => { loadingLinkPrevented = true; } });
+const modalMarkup = renderToStaticMarkup(React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(Modal, { isOpen: true, title: 'First', subtitle: 'First details', onClose: () => {} }, 'Content'),
+  React.createElement(Modal, { isOpen: true, title: 'Second', onClose: () => {} }, 'Content')
+));
+const fieldStatesMarkup = renderToStaticMarkup(React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(Checkbox, { checked: true, onChange: () => {}, label: 'Remember', description: 'Keep signed in' }),
+  React.createElement(Toggle, { checked: false, onChange: () => {}, label: 'Alerts', description: 'Send notifications' }),
+  React.createElement(Select, { label: 'Status', error: 'Status is required', options: [{ value: '', label: 'Choose' }] })
+));
 
 const authMarkup = renderToStaticMarkup(React.createElement(
   AuthCard,
@@ -91,6 +112,12 @@ assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
 assert.match(enabledLinkMarkup, /<a[^>]*href="\/details"[^>]*>Details<\/a>/);
 assert.match(disabledLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*tabindex="-1"[^>]*>Details<\/a>/);
 assert.doesNotMatch(disabledLinkMarkup, /href="\/details"/);
+assert.match(loadingLinkMarkup, /<a[^>]*aria-busy="true"[^>]*>/);
+assert.match(loadingLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*>/);
+assert.match(loadingLinkMarkup, /<a[^>]*tabindex="-1"[^>]*>.*Details<\/a>/);
+assert.doesNotMatch(loadingLinkMarkup, /href="\/details"/);
+assert.doesNotMatch(loadingLinkMarkup, /Loading/);
+assert.equal(loadingLinkPrevented, true);
 assert.match(authMarkup, /Header/);
 assert.match(authMarkup, /aria-invalid="true"/);
 assert.match(authMarkup, /aria-describedby="email-hint email-error"/);
@@ -136,6 +163,17 @@ assert.match(layoutMarkup, /Loading data/);
 assert.match(layoutMarkup, /<select/);
 assert.match(layoutMarkup, /role="switch"/);
 assert.match(layoutMarkup, /aria-modal="true"/);
+assert.match(modalMarkup, /<div[^>]*role="dialog"[^>]*aria-modal="true"[^>]*aria-labelledby="([^"]+)"[^>]*aria-describedby="([^"]+)"/);
+const modalTitleIds = [...modalMarkup.matchAll(/<h2 id="([^"]+)"/g)].map((match) => match[1]);
+assert.equal(new Set(modalTitleIds).size, 2);
+assert.match(modalMarkup, /aria-labelledby="[^"]+"/);
+assert.match(modalMarkup, /aria-describedby="[^"]+"/);
+assert.match(fieldStatesMarkup, /<label[^>]*for="checkbox-[^"]+"/);
+assert.match(fieldStatesMarkup, /<input[^>]*type="checkbox"[^>]*aria-describedby="checkbox-[^"]+-description"[^>]*checked=""/);
+assert.match(fieldStatesMarkup, /<label[^>]*for="toggle-[^"]+"/);
+assert.match(fieldStatesMarkup, /<input[^>]*role="switch"[^>]*aria-checked="false"[^>]*aria-describedby="toggle-[^"]+-description"/);
+assert.match(fieldStatesMarkup, /<select[^>]*aria-invalid="true"[^>]*aria-describedby="select-[^"]+-error"/);
+assert.match(fieldStatesMarkup, /<p id="select-[^"]+-error" role="alert"[^>]*>Status is required<\/p>/);
 assert.match(layoutMarkup, /Saved/);
 assert.match(layoutMarkup, /Users/);
 assert.match(layoutMarkup, /<table[^>]*>/);
