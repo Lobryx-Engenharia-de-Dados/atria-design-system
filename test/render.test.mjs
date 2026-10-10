@@ -163,6 +163,7 @@ assert.match(wordmarkMarkup, /aria-hidden="true"/);
 assert.match(authFooterMarkup, /pt-8 border-t border-border\/50 flex flex-col items-center gap-6/);
 assert.match(authFooterMarkup, /href="\/privacy"/);
 assert.match(authFooterMarkup, /href="\/terms"/);
+assert.match(authFooterMarkup, /text-foreground-secondary hover:text-accent-text/);
 assert.match(authFooterMarkup, /bg-border rounded-full/);
 assert.match(authFooterMarkup, /Setup/);
 assert.match(desktopShellMarkup, /flex h-screen overflow-hidden bg-background text-foreground/);
@@ -247,7 +248,7 @@ assert.match(lightTheme, /--_ds-primary-light: #f1f5f9/);
 assert.match(darkTheme, /--_ds-foreground-on-dark: #ffffff/);
 assert.match(darkTheme, /--_ds-foreground-on-dark-muted: rgba\(255, 255, 255, 0\.7\)/);
 assert.match(darkTheme, /--_ds-accent-text: #ff8700/);
-assert.match(lightTheme, /--_ds-accent-text: #c2410c/);
+assert.match(lightTheme, /--_ds-accent-text: #9a3412/);
 
 const statusColors = ['success', 'warning', 'error', 'info'];
 const parseHex = (block, token) => block.match(new RegExp(`${token}:\\s*(#[0-9a-f]+)`))?.[1];
@@ -283,4 +284,21 @@ for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
     `${name} skeleton contrast against surface must meet 3:1`);
   assert.ok(contrast(skeleton, background) >= 3,
     `${name} skeleton contrast against background must meet 3:1`);
+}
+
+assert.match(desktopShellMarkup, /aria-current="page"[^>]*class="[^"]*text-accent-text/,
+  'active sidebar item must use the AA-safe accent text token');
+
+for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
+  const accentText = parseHex(themeBlock, '--_ds-accent-text');
+  const surface = parseHex(themeBlock, '--_ds-surface');
+  const background = parseHex(themeBlock, '--_ds-background');
+  const secondary = parseHex(themeBlock, '--_ds-foreground-secondary');
+  assert.ok(accentText && surface && background && secondary);
+  assert.ok(contrast(accentText, surface) >= 4.5,
+    `${name} accent text contrast against surface must meet AA`);
+  assert.ok(contrast(accentText, background) >= 4.5,
+    `${name} accent text contrast against background must meet AA`);
+  assert.ok(contrast(secondary, surface) >= 4.5,
+    `${name} AuthFooter link contrast against surface must meet AA`);
 }

@@ -20,7 +20,7 @@ export function AuthFooter({ links = [], children }: AuthFooterProps) {
               {index > 0 && <span className="w-1 h-1 bg-border rounded-full" aria-hidden="true" />}
               <a
                 href={link.href}
-                className="hover:text-accent-text transition-colors underline underline-offset-4 decoration-accent/30"
+                className="text-foreground-secondary hover:text-accent-text transition-colors underline underline-offset-4 decoration-accent/30"
               >
                 {link.label}
               </a>

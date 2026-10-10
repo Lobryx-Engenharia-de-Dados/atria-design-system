@@ -30,7 +30,7 @@ export function AppSidebar({ brand, groups, items, footer, className = '', onNav
                   href={item.href}
                   onClick={onNavigate}
                   aria-current={item.active ? 'page' : undefined}
-                  className={`relative flex items-center gap-3 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 ${item.active ? 'border-accent bg-accent/10 text-accent' : 'border-transparent text-foreground-muted hover:bg-primary-light hover:text-foreground'}`}
+                  className={`relative flex items-center gap-3 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 ${item.active ? 'border-accent bg-accent/10 text-accent-text' : 'border-transparent text-foreground-muted hover:bg-primary-light hover:text-foreground'}`}
                 >
                   {item.icon && <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center">{item.icon}</span>}
                   <span>{item.label}</span>
