@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Container, DashboardGrid, EmptyState, ErrorAlert, ErrorState, Grid, KpiCard, LoadingState, PageHeader, PasswordField, Skeleton, Stack, Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Text, TextField, Wordmark } from '../dist/index.js';
+import { Alert, AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Checkbox, Container, DashboardGrid, EmptyState, ErrorAlert, ErrorState, Grid, KpiCard, LoadingState, Modal, PageHeader, PasswordField, Select, Skeleton, Stack, StatCard, Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Text, TextField, Toggle, Wordmark } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
   React.createElement(
     Card,
     null,
-    React.createElement(Button, { variant: 'primary' }, 'Save'),
-    React.createElement(Badge, { status: 'success' }, 'Healthy'),
+    React.createElement(Button, { variant: 'danger', size: 'lg', loading: true }, 'Save'),
+    React.createElement(Badge, { variant: 'neutral', icon: '•' }, 'Healthy'),
     React.createElement(KpiCard, { label: 'Revenue', value: '$100' }),
     React.createElement(Skeleton, { className: 'h-4 w-32' })
   )
@@ -24,7 +24,7 @@ const disabledLinkMarkup = renderToStaticMarkup(React.createElement(
 const authMarkup = renderToStaticMarkup(React.createElement(
   AuthCard,
   { header: 'Header', footer: 'Footer' },
-  React.createElement(TextField, { id: 'email', label: 'Email', error: 'Required' }),
+  React.createElement(TextField, { id: 'email', label: 'Email', hint: 'Use your work email', error: 'Required' }),
   React.createElement(PasswordField, { id: 'password', label: 'Password', showLabel: 'Show password', hideLabel: 'Hide password' }),
   React.createElement(ErrorAlert, null, 'Unable to sign in'),
   React.createElement(AuthSubmitButton, { loading: true, loadingText: 'Signing in' }, 'Sign in')
@@ -66,6 +66,12 @@ const layoutMarkup = renderToStaticMarkup(React.createElement(
   React.createElement(EmptyState, { title: 'Nothing here', description: 'Try another filter', action: { label: 'Create' } }),
   React.createElement(ErrorState, { title: 'Failed', description: 'Try again', retry: { label: 'Retry', href: '/retry' } }),
   React.createElement(LoadingState, { message: 'Loading data' }),
+  React.createElement(Select, { label: 'Status', options: [{ value: 'open', label: 'Open' }] }),
+  React.createElement(Checkbox, { checked: true, onChange: () => {}, label: 'Remember me', description: 'Keep this device signed in' }),
+  React.createElement(Toggle, { checked: false, onChange: () => {}, label: 'Notifications' }),
+  React.createElement(Modal, { isOpen: true, title: 'Confirm', onClose: () => {} }, 'Modal content'),
+  React.createElement(Alert, { tone: 'success' }, 'Saved'),
+  React.createElement(StatCard, { title: 'Users', value: '42', secondaryValue: 'This month' }),
   React.createElement(Table, { density: 'compact' },
     React.createElement(TableCaption, null, 'Data caption'),
     React.createElement(TableHead, null, React.createElement(TableRow, null, React.createElement(TableHeaderCell, null, 'Name'))),
@@ -74,7 +80,9 @@ const layoutMarkup = renderToStaticMarkup(React.createElement(
 ));
 
 assert.match(markup, /Save/);
-assert.match(markup, /bg-accent/);
+assert.match(markup, /bg-status-error/);
+assert.match(markup, /aria-busy="true"/);
+assert.match(markup, /min-h-11/);
 assert.match(markup, /Healthy/);
 assert.match(markup, /Revenue/);
 assert.match(markup, /aria-hidden="true"/);
@@ -85,7 +93,8 @@ assert.match(disabledLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*tabindex="-1"[
 assert.doesNotMatch(disabledLinkMarkup, /href="\/details"/);
 assert.match(authMarkup, /Header/);
 assert.match(authMarkup, /aria-invalid="true"/);
-assert.match(authMarkup, /aria-describedby="email-error"/);
+assert.match(authMarkup, /aria-describedby="email-hint email-error"/);
+assert.match(authMarkup, /email-hint/);
 assert.match(authMarkup, /role="alert"/);
 assert.match(authMarkup, /type="password"/);
 assert.match(authMarkup, /aria-label="Show password"/);
@@ -124,6 +133,11 @@ assert.match(layoutMarkup, /<a[^>]*href="\/retry"[^>]*>Retry<\/a>/);
 assert.match(layoutMarkup, /role="alert"/);
 assert.match(layoutMarkup, /aria-busy="true"/);
 assert.match(layoutMarkup, /Loading data/);
+assert.match(layoutMarkup, /<select/);
+assert.match(layoutMarkup, /role="switch"/);
+assert.match(layoutMarkup, /aria-modal="true"/);
+assert.match(layoutMarkup, /Saved/);
+assert.match(layoutMarkup, /Users/);
 assert.match(layoutMarkup, /<table[^>]*>/);
 assert.match(layoutMarkup, /<th scope="col"/);
 assert.match(layoutMarkup, /Data caption/);

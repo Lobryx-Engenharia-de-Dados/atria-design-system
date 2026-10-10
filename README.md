@@ -23,7 +23,7 @@ import { Button, Badge, Card, KpiCard, Skeleton } from "@lobryx/design-system";
 export function Dashboard() {
   return (
     <Card>
-      <KpiCard label="Receita" value="R$ 15.000" change="+12%" changeType="positive" />
+      <KpiCard label="Receita" value="R$ 15.000" delta="+12%" />
       <Badge variant="success">Online</Badge>
       <Button variant="primary">Acessar</Button>
       <Skeleton className="h-4 w-32" />
@@ -35,9 +35,14 @@ export function Dashboard() {
 ### Catálogo de átomos
 
 - `Button`: ação interativa com variantes semânticas.
-- `Badge`: indicador de status.
+- `Badge`: indicador semântico com `variant` (`neutral`, `success`, `warning`, `error`, `info` ou `outline`) e `icon` opcional.
+- `TextField`: campo com `label`, `hint`, `icon` e `error` acessíveis.
+- `Select`, `Checkbox` e `Toggle`: controles de formulário tipados e acessíveis.
+- `Modal`: diálogo com fechamento por Esc, `aria-modal` e foco contido.
+- `Alert`: banner semântico com `tone`.
 - `Card`: contêiner de superfície.
-- `KpiCard`: cartão de indicador-chave.
+- `StatCard`: cartão canônico de métrica.
+- `KpiCard`: alias deprecado de `StatCard`.
 - `Skeleton`: placeholder decorativo de carregamento. A região que o contém
   deve expor `aria-busy` e a mensagem acessível.
 

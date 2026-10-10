@@ -1,23 +1,34 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
-export type BadgeStatus = 'success' | 'warning' | 'error' | 'info';
+export type BadgeVariant = 'neutral' | 'success' | 'warning' | 'error' | 'info' | 'outline';
+/** @deprecated Use BadgeVariant. Kept for source compatibility. */
+export type BadgeStatus = Exclude<BadgeVariant, 'neutral' | 'outline'>;
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  status: BadgeStatus;
+  variant?: BadgeVariant;
+  icon?: ReactNode;
+  /** @deprecated Use variant. */
+  status?: BadgeStatus;
 }
 
-const statusClasses: Record<BadgeStatus, string> = {
+const variantClasses: Record<BadgeVariant, string> = {
+  neutral: 'border-border bg-surface-elevated text-foreground',
   success: 'border-status-success-border bg-status-success-bg text-status-success',
   warning: 'border-status-warning-border bg-status-warning-bg text-status-warning',
   error: 'border-status-error-border bg-status-error-bg text-status-error',
-  info: 'border-status-info-border bg-status-info-bg text-status-info'
+  info: 'border-status-info-border bg-status-info-bg text-status-info',
+  outline: 'border-border border-dashed bg-transparent text-foreground-muted'
 };
 
-export function Badge({ className = '', status, ...props }: BadgeProps) {
+export function Badge({ className = '', variant, status, icon, children, ...props }: BadgeProps) {
+  const resolvedVariant = variant ?? status ?? 'neutral';
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${statusClasses[status]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${variantClasses[resolvedVariant]} ${className}`}
       {...props}
-    />
+    >
+      {icon}
+      {children}
+    </span>
   );
 }

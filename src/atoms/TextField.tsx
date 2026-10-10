@@ -4,17 +4,19 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: ReactNode;
   icon?: ReactNode;
   error?: string;
+  hint?: ReactNode;
   id?: string;
 }
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
-  { label, icon, error, id, className = '', 'aria-describedby': describedBy, ...props },
+  { label, icon, error, hint, id, className = '', 'aria-describedby': describedBy, ...props },
   ref
 ) {
   const generatedId = useId();
   const fieldId = id ?? `text-field-${generatedId}`;
   const errorId = `${fieldId}-error`;
-  const ariaDescribedBy = [describedBy, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
+  const hintId = `${fieldId}-hint`;
+  const ariaDescribedBy = [describedBy, hint ? hintId : undefined, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
 
   return (
     <div className="space-y-2">
@@ -30,6 +32,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
           className={`w-full bg-surface border-2 rounded-xl pl-12 pr-4 py-3.5 text-sm text-foreground font-medium placeholder:text-foreground-muted/60 focus:outline-none focus:ring-4 transition-all shadow-sm ${error ? 'border-status-error-border focus:border-status-error-border focus:ring-status-error/10' : 'border-border focus:border-accent focus:ring-accent/10'} ${className}`}
         />
       </div>
+      {hint && <p id={hintId} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={errorId} className="text-[10px] text-status-error font-bold uppercase tracking-tight ml-1" role="alert">{error}</p>}
     </div>
   );
