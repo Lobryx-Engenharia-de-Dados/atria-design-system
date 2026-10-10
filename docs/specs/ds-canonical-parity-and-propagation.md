@@ -64,8 +64,8 @@ por wrappers bespoke):
 - `Checkbox` e `Toggle` aceitam `id` e `name` (passthrough explícito) para associação
   label↔controle e para seletores de teste — hoje só geram `id` interno.
 - `Modal` expõe largura canônica (`size?: 'sm' | 'md' | 'lg' | 'xl'`, default `md`),
-  mapeando `sm→max-w-sm`, `md→max-w-lg`, `lg→max-w-2xl`, `xl→max-w-3xl`, para não
-  degradar consumidores que usavam larguras maiores.
+  mapeando `sm→max-w-md`, `md→max-w-lg`, `lg→max-w-2xl`, `xl→max-w-3xl`, para cobrir as
+  larguras legadas dos consumidores sem degradação visual.
 - A lib expõe `Textarea` (multilinha, com `label`/`error`/`hint`) — sem ele, consumidores
   mantêm `<textarea>` bespoke.
 - `LoadingState` usa `message` como texto acessível; aliases de consumidor que recebiam

@@ -189,7 +189,7 @@ const modalTitleIds = [...modalMarkup.matchAll(/<h2 id="([^"]+)"/g)].map((match)
 assert.equal(new Set(modalTitleIds).size, 2);
 assert.match(modalMarkup, /aria-labelledby="[^"]+"/);
 assert.match(modalMarkup, /aria-describedby="[^"]+"/);
-assert.match(modalSizesMarkup, /w-full max-w-sm/);
+assert.match(modalSizesMarkup, /w-full max-w-md/);
 assert.match(modalSizesMarkup, /w-full max-w-lg/);
 assert.match(modalSizesMarkup, /w-full max-w-2xl/);
 assert.match(modalSizesMarkup, /w-full max-w-3xl/);
