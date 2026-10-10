@@ -1,4 +1,14 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+
+type ModalStackEntry = object;
+
+const openModalStack: ModalStackEntry[] = [];
+
+const removeFromModalStack = (entry: ModalStackEntry) => {
+  const index = openModalStack.indexOf(entry);
+  if (index !== -1) openModalStack.splice(index, 1);
+};
+
 export interface ModalProps { isOpen: boolean; title: ReactNode; subtitle?: ReactNode; icon?: ReactNode; onClose: () => void; children: ReactNode }
 export function Modal({ isOpen, title, subtitle, icon, onClose, children }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -6,15 +16,20 @@ export function Modal({ isOpen, title, subtitle, icon, onClose, children }: Moda
   const descId = `modal-description-${useId()}`;
   useEffect(() => {
     if (!isOpen) return;
+    const stackEntry: ModalStackEntry = {};
+    openModalStack.push(stackEntry);
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const isTopModal = () => openModalStack[openModalStack.length - 1] === stackEntry;
     const getFocusable = () => Array.from(panelRef.current?.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') ?? []);
     const restoreFocus = () => {
       if (previouslyFocused?.isConnected) previouslyFocused.focus();
     };
     const onFocusIn = (event: FocusEvent) => {
+      if (!isTopModal()) return;
       if (panelRef.current && !panelRef.current.contains(event.target as Node)) panelRef.current.focus();
     };
     const onKeyDown = (event: KeyboardEvent) => {
+      if (!isTopModal()) return;
       if (event.key === 'Escape') { onClose(); return; }
       if (event.key !== 'Tab' || !panelRef.current) return;
       const focusable = getFocusable();
@@ -31,7 +46,9 @@ export function Modal({ isOpen, title, subtitle, icon, onClose, children }: Moda
     return () => {
       document.removeEventListener('focusin', onFocusIn);
       document.removeEventListener('keydown', onKeyDown);
-      restoreFocus();
+      const wasTopModal = isTopModal();
+      removeFromModalStack(stackEntry);
+      if (wasTopModal) restoreFocus();
     };
   }, [isOpen, onClose]);
   if (!isOpen) return null;
