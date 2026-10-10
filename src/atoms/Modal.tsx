@@ -9,8 +9,8 @@ const removeFromModalStack = (entry: ModalStackEntry) => {
   if (index !== -1) openModalStack.splice(index, 1);
 };
 
-export interface ModalProps { isOpen: boolean; title: ReactNode; subtitle?: ReactNode; icon?: ReactNode; onClose: () => void; children: ReactNode }
-export function Modal({ isOpen, title, subtitle, icon, onClose, children }: ModalProps) {
+export interface ModalProps { isOpen: boolean; title: ReactNode; subtitle?: ReactNode; icon?: ReactNode; onClose: () => void; children: ReactNode; size?: 'sm' | 'md' | 'lg' }
+export function Modal({ isOpen, title, subtitle, icon, onClose, children, size = 'md' }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = `modal-title-${useId()}`;
   const descId = `modal-description-${useId()}`;
@@ -52,5 +52,6 @@ export function Modal({ isOpen, title, subtitle, icon, onClose, children }: Moda
     };
   }, [isOpen, onClose]);
   if (!isOpen) return null;
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/80 p-4" role="presentation"><div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={subtitle ? descId : undefined} tabIndex={-1} className="w-full max-w-lg rounded-lg border border-border bg-surface p-5 text-foreground shadow-card"><header className="mb-4 flex items-start justify-between gap-4"><div><h2 id={titleId} className="flex items-center gap-2 font-headings text-xl font-bold">{icon}{title}</h2>{subtitle && <p id={descId} className="mt-1 text-sm text-foreground-muted">{subtitle}</p>}</div><button type="button" onClick={onClose} aria-label="Close" className="min-h-11 min-w-11 rounded-md focus-visible:outline-2 focus-visible:outline-border-focus">×</button></header>{children}</div></div>;
+  const maxWidthClass = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-3xl' }[size];
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/80 p-4" role="presentation"><div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={subtitle ? descId : undefined} tabIndex={-1} className={`w-full ${maxWidthClass} rounded-lg border border-border bg-surface p-5 text-foreground shadow-card`}><header className="mb-4 flex items-start justify-between gap-4"><div><h2 id={titleId} className="flex items-center gap-2 font-headings text-xl font-bold">{icon}{title}</h2>{subtitle && <p id={descId} className="mt-1 text-sm text-foreground-muted">{subtitle}</p>}</div><button type="button" onClick={onClose} aria-label="Close" className="min-h-11 min-w-11 rounded-md focus-visible:outline-2 focus-visible:outline-border-focus">×</button></header>{children}</div></div>;
 }

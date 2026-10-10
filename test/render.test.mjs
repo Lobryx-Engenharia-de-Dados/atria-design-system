@@ -34,12 +34,25 @@ const modalMarkup = renderToStaticMarkup(React.createElement(
   React.createElement(Modal, { isOpen: true, title: 'First', subtitle: 'First details', onClose: () => {} }, 'Content'),
   React.createElement(Modal, { isOpen: true, title: 'Second', onClose: () => {} }, 'Content')
 ));
+const modalSizesMarkup = renderToStaticMarkup(React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(Modal, { isOpen: true, title: 'Small', size: 'sm', onClose: () => {} }, 'Content'),
+  React.createElement(Modal, { isOpen: true, title: 'Medium', size: 'md', onClose: () => {} }, 'Content'),
+  React.createElement(Modal, { isOpen: true, title: 'Large', size: 'lg', onClose: () => {} }, 'Content')
+));
 const fieldStatesMarkup = renderToStaticMarkup(React.createElement(
   React.Fragment,
   null,
   React.createElement(Checkbox, { checked: true, onChange: () => {}, label: 'Remember', description: 'Keep signed in' }),
   React.createElement(Toggle, { checked: false, onChange: () => {}, label: 'Alerts', description: 'Send notifications' }),
   React.createElement(Select, { label: 'Status', error: 'Status is required', options: [{ value: '', label: 'Choose' }] })
+));
+const explicitControlMarkup = renderToStaticMarkup(React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(Checkbox, { checked: true, onChange: () => {}, id: 'remember', name: 'remember', label: 'Remember', description: 'Keep signed in' }),
+  React.createElement(Toggle, { checked: false, onChange: () => {}, id: 'alerts', name: 'alerts', label: 'Alerts', description: 'Send notifications' })
 ));
 
 const authMarkup = renderToStaticMarkup(React.createElement(
@@ -168,6 +181,13 @@ const modalTitleIds = [...modalMarkup.matchAll(/<h2 id="([^"]+)"/g)].map((match)
 assert.equal(new Set(modalTitleIds).size, 2);
 assert.match(modalMarkup, /aria-labelledby="[^"]+"/);
 assert.match(modalMarkup, /aria-describedby="[^"]+"/);
+assert.match(modalSizesMarkup, /w-full max-w-sm/);
+assert.match(modalSizesMarkup, /w-full max-w-lg/);
+assert.match(modalSizesMarkup, /w-full max-w-3xl/);
+assert.match(explicitControlMarkup, /<label[^>]*for="remember"[^>]*>.*<input id="remember"[^>]*name="remember"/);
+assert.match(explicitControlMarkup, /aria-describedby="remember-description"/);
+assert.match(explicitControlMarkup, /<label[^>]*for="alerts"[^>]*>.*<input id="alerts"[^>]*name="alerts"/);
+assert.match(explicitControlMarkup, /aria-describedby="alerts-description"/);
 assert.match(fieldStatesMarkup, /<label[^>]*for="checkbox-[^"]+"/);
 assert.match(fieldStatesMarkup, /<input[^>]*type="checkbox"[^>]*aria-describedby="checkbox-[^"]+-description"[^>]*checked=""/);
 assert.match(fieldStatesMarkup, /<label[^>]*for="toggle-[^"]+"/);
