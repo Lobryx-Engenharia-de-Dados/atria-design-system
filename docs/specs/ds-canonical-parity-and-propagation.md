@@ -56,6 +56,18 @@ Composições app-específicas (`SectionCard`, `DataTableCard`, `PageActions`,
 `MetricsGrid`) **não** sobem para a lib; devem ser reescritas **sobre**
 primitivos canônicos (ex.: `Card`/`DashboardGrid`/`Button`) nos consumidores.
 
+### 2.4 Requisitos de paridade descobertos na propagação
+
+Defeitos de paridade observados ao migrar os consumidores (devem ser cobertos pela lib, não
+por wrappers bespoke):
+
+- `Checkbox` e `Toggle` aceitam `id` e `name` (passthrough explícito) para associação
+  label↔controle e para seletores de teste — hoje só geram `id` interno.
+- `Modal` expõe largura canônica (`size?: 'sm' | 'md' | 'lg'`, default `md`), para não
+  degradar consumidores que usavam larguras maiores.
+- `LoadingState` usa `message` como texto acessível; aliases de consumidor que recebiam
+  `label` devem mapear para `message` (correção no consumidor, não novo prop).
+
 ## 3. Critérios de aceite BDD
 
 ### Lib (design-system)
