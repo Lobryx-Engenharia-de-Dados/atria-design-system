@@ -3,6 +3,12 @@
   "version": "0.2.0",
   "private": false,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lobryx-Engenharia-de-Dados/atria-design-system.git"
+  },
+  "license": "UNLICENSED",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,6 +24,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node test/render.test.mjs"
