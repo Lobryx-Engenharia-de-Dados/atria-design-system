@@ -37,11 +37,12 @@ export function Dashboard() {
 - `Button`: ação interativa com variantes semânticas.
 - `Badge`: indicador semântico com `variant` (`neutral`, `success`, `warning`, `error`, `info` ou `outline`) e `icon` opcional.
 - `TextField`: campo com `label`, `hint`, `icon` e `error` acessíveis.
+- `Textarea`: campo multilinha com `label`, `hint` e `error` acessíveis.
 - `Select`, `Checkbox` e `Toggle`: controles de formulário tipados e acessíveis. `Checkbox` e
   `Toggle` aceitam `id`/`name` explícitos; sem `id`, geram um identificador interno para
   manter a associação com o label.
 - `Modal`: diálogo com fechamento por Esc, `aria-modal` e foco contido. Aceita `size`
-  (`sm`, `md` ou `lg`), com `md` como padrão (`max-w-lg`).
+  (`sm`, `md`, `lg` ou `xl`), com `md` como padrão (`max-w-lg`).
 - `Alert`: banner semântico com `tone`.
 - `Card`: contêiner de superfície.
 - `StatCard`: cartão canônico de métrica.

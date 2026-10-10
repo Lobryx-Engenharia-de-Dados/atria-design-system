@@ -25,6 +25,8 @@ export { AuthCard } from './AuthCard.js';
 export type { AuthCardProps } from './AuthCard.js';
 export { TextField } from './TextField.js';
 export type { TextFieldProps } from './TextField.js';
+export { Textarea } from './Textarea.js';
+export type { TextareaProps } from './Textarea.js';
 export { PasswordField } from './PasswordField.js';
 export type { PasswordFieldProps } from './PasswordField.js';
 export { ErrorAlert } from './ErrorAlert.js';

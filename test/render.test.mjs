@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Alert, AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Checkbox, Container, DashboardGrid, EmptyState, ErrorAlert, ErrorState, Grid, KpiCard, LoadingState, Modal, PageHeader, PasswordField, Select, Skeleton, Stack, StatCard, Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Text, TextField, Toggle, Wordmark } from '../dist/index.js';
+import { Alert, AppShell, AppSidebar, AppTopbar, AuthCard, AuthFooter, AuthHeader, AuthSubmitButton, Badge, Button, Card, Checkbox, Container, DashboardGrid, EmptyState, ErrorAlert, ErrorState, Grid, KpiCard, LoadingState, Modal, PageHeader, PasswordField, Select, Skeleton, Stack, StatCard, Table, TableBody, TableCaption, TableCell, TableHead, TableHeaderCell, TableRow, Text, Textarea, TextField, Toggle, Wordmark } from '../dist/index.js';
 import { readFile } from 'node:fs/promises';
 
 const markup = renderToStaticMarkup(
@@ -39,8 +39,16 @@ const modalSizesMarkup = renderToStaticMarkup(React.createElement(
   null,
   React.createElement(Modal, { isOpen: true, title: 'Small', size: 'sm', onClose: () => {} }, 'Content'),
   React.createElement(Modal, { isOpen: true, title: 'Medium', size: 'md', onClose: () => {} }, 'Content'),
-  React.createElement(Modal, { isOpen: true, title: 'Large', size: 'lg', onClose: () => {} }, 'Content')
+  React.createElement(Modal, { isOpen: true, title: 'Large', size: 'lg', onClose: () => {} }, 'Content'),
+  React.createElement(Modal, { isOpen: true, title: 'Extra large', size: 'xl', onClose: () => {} }, 'Content')
 ));
+const textareaMarkup = renderToStaticMarkup(React.createElement(Textarea, {
+  id: 'bio',
+  name: 'bio',
+  label: 'Biography',
+  hint: 'Tell us about yourself',
+  error: 'Biography is required'
+}));
 const fieldStatesMarkup = renderToStaticMarkup(React.createElement(
   React.Fragment,
   null,
@@ -183,7 +191,12 @@ assert.match(modalMarkup, /aria-labelledby="[^"]+"/);
 assert.match(modalMarkup, /aria-describedby="[^"]+"/);
 assert.match(modalSizesMarkup, /w-full max-w-sm/);
 assert.match(modalSizesMarkup, /w-full max-w-lg/);
+assert.match(modalSizesMarkup, /w-full max-w-2xl/);
 assert.match(modalSizesMarkup, /w-full max-w-3xl/);
+assert.match(textareaMarkup, /<label[^>]*for="bio"[^>]*>Biography<\/label>/);
+assert.match(textareaMarkup, /<textarea[^>]*name="bio"[^>]*id="bio"[^>]*aria-invalid="true"[^>]*aria-describedby="bio-hint bio-error"/);
+assert.match(textareaMarkup, /<p id="bio-hint"[^>]*>Tell us about yourself<\/p>/);
+assert.match(textareaMarkup, /<p id="bio-error"[^>]*role="alert"[^>]*>Biography is required<\/p>/);
 assert.match(explicitControlMarkup, /<label[^>]*for="remember"[^>]*>.*<input id="remember"[^>]*name="remember"/);
 assert.match(explicitControlMarkup, /aria-describedby="remember-description"/);
 assert.match(explicitControlMarkup, /<label[^>]*for="alerts"[^>]*>.*<input id="alerts"[^>]*name="alerts"/);
