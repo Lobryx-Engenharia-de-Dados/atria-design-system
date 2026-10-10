@@ -27,6 +27,14 @@ raios, sombras, duração e easing também são consumidos somente por utilities
 geradas a partir do tema. O contrato deve funcionar nos temas padrão dark e
 `[data-theme='light']`, sem criar um segundo tema.
 
+### Contrato de espaçamento
+
+`--spacing: 0.25rem` é a base oficial da escala de espaçamento do Tailwind v4;
+utilities como `p-*`, `m-*`, `gap-*` e `space-*` devem derivar dela. Os tokens
+legados e públicos `--space-1` a `--space-8` permanecem disponíveis, com a
+relação invariável `--space-N == N × --spacing` (por exemplo, `--space-8 == 2rem`).
+Assim, a lib é a fonte única da escala sem alterar os valores visuais atuais.
+
 ## Critérios de aceite BDD
 
 ### Eixo 1 — Grids e containers

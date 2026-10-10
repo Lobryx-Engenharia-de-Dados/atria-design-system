@@ -60,8 +60,12 @@ ativado no elemento raiz com `data-theme="light"`:
 <html data-theme="light">
 ```
 
-Além das cores, o contrato inclui `--radius-*`, `--space-*`, `--shadow-*`, `--font-*`,
-`--duration-*` e `--ease-*`. A marca é `--color-primary`/`--color-brand-navy`;
+Além das cores, o contrato inclui `--radius-*`, `--spacing`, `--space-*`, `--shadow-*`,
+`--font-*`, `--duration-*` e `--ease-*`. `--spacing` é a base oficial de espaçamento
+do Tailwind v4 e vale `0.25rem`; portanto, utilities como `p-4`, `gap-2` e `space-y-*`
+derivam dessa base. Os tokens públicos `--space-N` são mantidos por compatibilidade e
+seguem o de-para formal `--space-N == N × --spacing` (por exemplo, `--space-4 == 1rem`).
+A marca é `--color-primary`/`--color-brand-navy`;
 texto usa `--color-foreground` (com variantes `--color-foreground-secondary`,
 `--color-foreground-muted`, `--color-accent-foreground` e `--color-inverse`), e
 estados/gráficos são sensíveis ao tema.

@@ -215,13 +215,20 @@ assert.match(layoutMarkup, /<th scope="col"/);
 assert.match(layoutMarkup, /Data caption/);
 
 const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+const themeBlock = theme.match(/@theme\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+const spacing = themeBlock.match(/--spacing:\s*([0-9.]+)rem/)?.[1];
+assert.equal(spacing, '0.25', 'the Tailwind spacing base must remain 0.25rem');
+for (const step of [1, 2, 3, 4, 5, 6, 8]) {
+  const value = themeBlock.match(new RegExp(`--space-${step}:\\s*([0-9.]+)rem`))?.[1];
+  assert.equal(value, String(Number(spacing) * step), `--space-${step} must equal ${step} × --spacing`);
+}
 for (const token of [
   '--color-background', '--color-surface', '--color-skeleton', '--color-primary', '--color-foreground',
   '--color-primary-light', '--color-foreground-on-dark', '--color-foreground-on-dark-muted',
   '--color-accent-foreground', '--color-accent-text', '--color-inverse', '--color-status-success',
   '--color-status-success-foreground', '--color-status-warning-foreground',
   '--color-status-error-foreground', '--color-status-info-foreground',
-  '--color-chart-1', '--radius-lg', '--space-4', '--shadow-card', '--font-sans',
+  '--color-chart-1', '--radius-lg', '--spacing', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
 ]) {
   assert.match(theme, new RegExp(`${token}:`));
