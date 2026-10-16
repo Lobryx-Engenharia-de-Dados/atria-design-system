@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
   "name": "@lobryx/design-system",
   "version": "0.2.0",
   "private": false,
