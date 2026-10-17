@@ -47,3 +47,6 @@ export { LoadingState } from './LoadingState.js';
 export type { LoadingStateProps } from './LoadingState.js';
 export { Text } from './Text.js';
 export type { TextProps, TextTone, TextVariant } from './Text.js';
+
+export { DateTimePicker, positionDateTimePopover, getMonthGrid } from './DateTimePicker.js';
+export type { DateTimePickerProps, DateTimePickerLabels, PopoverRect } from './DateTimePicker.js';
