@@ -22,6 +22,13 @@ await test('selecting a day emits exact local string, independent of timezone', 
   assert.equal(emitted, '2024-02-29T09:07');
   console.log(`VALUE=${emitted}`);
 });
+await test('selected day receives visible accent classes', async () => {
+  const view = render(React.createElement(DateTimePicker, { value: '2024-02-15T09:07', onChange: () => {}, labels }));
+  fireEvent.click(view.getByRole('button', { name: '15/02/2024, 09:07' }));
+  const selected = view.getByRole('gridcell', { name: '15' });
+  assert.equal(selected.getAttribute('aria-selected'), 'true');
+  for (const token of ['aspect-square', 'w-full', 'rounded-md', 'text-sm', 'bg-accent', 'text-accent-foreground', 'font-bold', 'hover:bg-surface-elevated', 'focus-visible:outline-2', 'focus-visible:outline-border-focus']) assert.ok(selected.classList.contains(token), `missing ${token}`);
+});
 await test('Escape closes and restores focus to trigger', async () => {
   const view = render(React.createElement(DateTimePicker, { value: '', onChange: () => {}, labels }));
   const trigger = view.getByRole('button', { name: 'Choose date' });
@@ -46,11 +53,15 @@ await test('keyboard arrows, Home, End, PageUp and PageDown navigate grid', asyn
   fireEvent.keyDown(view.getByRole('gridcell', { name: '15' }), { key: 'PageUp' });
   assert.equal(view.getByRole('grid').getAttribute('aria-label'), 'fevereiro de 2024');
 });
-await test('popover clamps at right edge and flips above when below space is insufficient', async () => {
+await test('popover clamps at right edge and flips above with an 8px trigger gap', async () => {
   const rect = positionDateTimePopover({ left: 980, right: 1000, top: 30, bottom: 50, width: 20 }, { width: 220, height: 180 }, { width: 1024, height: 768 });
   assert.ok(rect.left + rect.width <= 1024 - 8);
   const flipped = positionDateTimePopover({ left: 20, right: 40, top: 250, bottom: 270, width: 20 }, { width: 200, height: 180 }, { width: 300, height: 300 });
-  assert.ok(flipped.top < 250);
+  assert.equal(flipped.top, 62);
+  assert.equal(flipped.top + flipped.height, 242);
+  assert.ok(flipped.top >= 8);
+  const belowFits = positionDateTimePopover({ left: 20, right: 40, top: 30, bottom: 50, width: 20 }, { width: 200, height: 180 }, { width: 300, height: 300 });
+  assert.equal(belowFits.top, 50);
 });
 await test('month grid handles Sunday first and Sunday last', async () => {
   const startsSunday = getMonthGrid(2023, 9); // October 2023
@@ -105,8 +116,19 @@ await test('adversarial time values clamp and malformed values emit valid local 
 await test('viewport 320x667 clamps trigger at lower right corner', async () => {
   const position = positionDateTimePopover({ left: 300, right: 320, top: 640, bottom: 660, width: 20 }, { width: 220, height: 180 }, { width: 320, height: 667 });
   assert.ok(position.left + position.width <= 312);
+  assert.ok(position.width <= 320 - 16);
   assert.ok(position.top < 640);
   assert.ok(position.top >= 8);
+  const view = render(React.createElement(DateTimePicker, { value: '2024-02-15T09:07', onChange: () => {}, labels }));
+  fireEvent.click(view.getByRole('button', { name: '15/02/2024, 09:07' }));
+  const dialog = view.getByRole('dialog');
+  assert.ok(dialog.classList.contains('w-80'));
+  const grid = view.getByRole('grid');
+  assert.ok(grid.classList.contains('w-full'));
+  assert.ok(grid.classList.contains('gap-1'));
+  const narrow = positionDateTimePopover({ left: 280, right: 300, top: 100, bottom: 120, width: 20 }, { width: 320, height: 180 }, { width: 320, height: 667 });
+  assert.ok(narrow.width <= 304);
+  assert.equal(narrow.top, 120);
 });
 await test('20 open-close cycles remove document listeners without accumulation', async () => {
   const originalAdd = document.addEventListener.bind(document);

@@ -22,7 +22,7 @@ export function positionDateTimePopover(
   const left = Math.min(Math.max(trigger.left, margin), viewport.width - margin - width);
   const below = viewport.height - trigger.bottom - margin;
   const top = popover.height <= below || below >= trigger.top - margin
-    ? trigger.bottom : Math.max(margin, trigger.top - popover.height);
+    ? trigger.bottom : Math.max(margin, trigger.top - margin - popover.height);
   return { left, top, width, height: popover.height };
 }
 
@@ -174,7 +174,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
       </button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={`${fieldId}-error`} role="alert" className="text-status-error">{error}</p>}
-      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 rounded-lg border border-border bg-surface p-4 text-foreground shadow-card">
+      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 w-80 rounded-lg border border-border bg-surface p-4 text-foreground shadow-card">
         <header className="flex items-center justify-between">
           <button type="button" aria-label={labels.previousYear} onClick={() => setView(new Date(view.getFullYear() - 1, view.getMonth(), 1))}>«</button>
           <button type="button" aria-label={labels.previousMonth} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))}>‹</button>
@@ -193,13 +193,14 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
           <button type="button" aria-label={labels.nextMonth} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))}>›</button>
           <button type="button" aria-label={labels.nextYear} onClick={() => setView(new Date(view.getFullYear() + 1, view.getMonth(), 1))}>»</button>
         </header>
-        <div role="grid" aria-label={monthName} className="grid grid-cols-7">
+        <div role="grid" aria-label={monthName} className="mt-3 grid w-full grid-cols-7 gap-1">
           {Array.from({ length: getMonthGrid(view.getFullYear(), view.getMonth()).length / 7 }, (_, week) => (
             <div role="row" key={week} className="contents">
               {getMonthGrid(view.getFullYear(), view.getMonth()).slice(week * 7, week * 7 + 7).map((date, index) => date
                 ? <button key={index} type="button" role="gridcell" data-day={date.getDate()}
                     aria-selected={parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate()}
-                    onKeyDown={(event) => gridKeyDown(event, date.getDate())} onClick={() => selectDay(date.getDate())}>{date.getDate()}</button>
+                    onKeyDown={(event) => gridKeyDown(event, date.getDate())} onClick={() => selectDay(date.getDate())}
+                    className={`aspect-square w-full rounded-md text-sm hover:bg-surface-elevated focus-visible:outline-2 focus-visible:outline-border-focus ${parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate() ? 'bg-accent text-accent-foreground font-bold' : date.toDateString() === new Date().toDateString() ? 'ring-1 ring-border-focus' : ''}`}>{date.getDate()}</button>
                 : <span key={index} role="gridcell" aria-disabled="true" />)}
             </div>
           ))}
