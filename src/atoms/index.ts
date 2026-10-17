@@ -50,3 +50,7 @@ export type { TextProps, TextTone, TextVariant } from './Text.js';
 
 export { DateTimePicker, positionDateTimePopover, getMonthGrid } from './DateTimePicker.js';
 export type { DateTimePickerProps, DateTimePickerLabels, PopoverRect } from './DateTimePicker.js';
+export { DatePicker } from './DatePicker.js';
+export type { DatePickerProps, DatePickerLabels } from './DatePicker.js';
+export { TimePicker } from './TimePicker.js';
+export type { TimePickerProps, TimePickerLabels } from './TimePicker.js';

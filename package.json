@@ -30,7 +30,7 @@
     "prepare": "npm run build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node test/render.test.mjs && node test/datetime-picker.test.mjs"
+    "test": "npm run build && node test/render.test.mjs && node test/datetime-picker.test.mjs && node test/date-picker.test.mjs && node test/time-picker.test.mjs"
   },
   "peerDependencies": {
     "react": ">=18",
