@@ -13,6 +13,7 @@ export interface DateTimePickerProps {
   locale?: string;
   triggerClassName?: string;
   'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
 }
 export interface PopoverRect { left: number; top: number; width: number; height: number; maxHeight: number }
 
@@ -50,7 +51,7 @@ function parseLocal(value: string) {
 }
 
 export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>(function DateTimePicker(
-  { id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels, locale = 'pt-BR' }, forwardedRef
+  { id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, 'aria-invalid': externalInvalid, labels, locale = 'pt-BR' }, forwardedRef
 ) {
   const generatedId = useId();
   const fieldId = id ?? `datetime-${generatedId}`;
@@ -171,7 +172,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
         if (typeof forwardedRef === 'function') forwardedRef(node);
         else if (forwardedRef) forwardedRef.current = node;
       }} id={fieldId} type="button" disabled={disabled} aria-required={required} aria-haspopup="dialog"
-        aria-expanded={open} aria-invalid={!!error} aria-describedby={describedBy}
+        aria-expanded={open} aria-invalid={externalInvalid ?? (error ? true : undefined)} aria-describedby={describedBy}
         onClick={() => {
           if (!open) {
             const current = parseLocal(value); const now = new Date();

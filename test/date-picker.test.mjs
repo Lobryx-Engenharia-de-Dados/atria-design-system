@@ -7,6 +7,12 @@ const { render, fireEvent, cleanup, within } = await import('@testing-library/re
 const { DatePicker } = await import('../dist/index.js');
 const labels = { placeholder: 'Choose date', today: 'Today', clear: 'Clear', previousMonth: 'Previous month', nextMonth: 'Next month', previousYear: 'Previous year', nextYear: 'Next year', month: 'Month', year: 'Year' };
 const test = async (name, callback) => { await callback(); console.log(`✓ ${name}`); cleanup(); };
+await test('DatePicker forwards external aria-invalid and preserves error-derived invalidity', async () => {
+  const external = render(React.createElement(DatePicker, { value: '', onChange: () => {}, labels, 'aria-invalid': true }));
+  assert.equal(external.getByRole('button').getAttribute('aria-invalid'), 'true'); cleanup();
+  const derived = render(React.createElement(DatePicker, { value: '', onChange: () => {}, labels, error: 'Invalid' }));
+  assert.equal(derived.getByRole('button').getAttribute('aria-invalid'), 'true');
+});
 await test('emits exact clicked local date and closes', async () => {
   let emitted; const view = render(React.createElement(DatePicker, { value: '2024-02-01', onChange: value => { emitted = value; }, labels }));
   fireEvent.click(view.getByRole('button', { name: '01/02/2024' }));
