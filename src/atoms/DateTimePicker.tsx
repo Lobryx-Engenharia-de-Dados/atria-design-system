@@ -7,6 +7,7 @@ export interface DateTimePickerLabels {
 }
 export interface DateTimePickerProps {
   id?: string; value: string; onChange: (value: string) => void; label?: ReactNode;
+  min?: string; max?: string;
   required?: boolean; disabled?: boolean; error?: string; hint?: ReactNode;
   name?: string; className?: string; labels: DateTimePickerLabels;
   locale?: string;
@@ -49,7 +50,7 @@ function parseLocal(value: string) {
 }
 
 export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>(function DateTimePicker(
-  { id, value, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels, locale = 'pt-BR' }, forwardedRef
+  { id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels, locale = 'pt-BR' }, forwardedRef
 ) {
   const generatedId = useId();
   const fieldId = id ?? `datetime-${generatedId}`;
@@ -62,6 +63,10 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
     return current ? new Date(current.year, current.month, 1) : new Date(now.getFullYear(), now.getMonth(), 1);
   });
   const parsed = parseLocal(value);
+  const validBound = (bound?: string) => { const p = bound ? parseLocal(bound) : null; return p && p.hour < 24 && p.minute < 60 && p.month >= 0 && p.month < 12 && p.day >= 1 && p.day <= new Date(p.year, p.month + 1, 0).getDate() ? bound! : ''; };
+  const minValue = validBound(min), maxValue = validBound(max);
+  const validRange = !(minValue && maxValue && minValue > maxValue);
+  const dayDisabled = (date: Date) => { const key = `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`; return Boolean(validRange && ((minValue && key < minValue.slice(0,10)) || (maxValue && key > maxValue.slice(0,10)))); };
 
   useEffect(() => {
     if (!open) return;
@@ -122,7 +127,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
   const emit = (year: number, month: number, day: number, hour: number, minute: number) => {
     onChange(`${year}-${pad(month + 1)}-${pad(day)}T${pad(clamp(hour, 0, 23))}:${pad(clamp(minute, 0, 59))}`);
   };
-  const selectDay = (day: number) => emit(view.getFullYear(), view.getMonth(), day, parsed?.hour ?? 0, parsed?.minute ?? 0);
+  const selectDay = (day: number) => { if (!dayDisabled(new Date(view.getFullYear(), view.getMonth(), day))) emit(view.getFullYear(), view.getMonth(), day, parsed?.hour ?? 0, parsed?.minute ?? 0); };
   const setTime = (part: 'hour' | 'minute', raw: string) => {
     const base = parsed ?? { year: view.getFullYear(), month: view.getMonth(), day: 1, hour: 0, minute: 0 };
     const amount = raw === '' ? 0 : Number(raw);
@@ -202,10 +207,10 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
           {Array.from({ length: getMonthGrid(view.getFullYear(), view.getMonth()).length / 7 }, (_, week) => (
             <div role="row" key={week} className="contents">
               {getMonthGrid(view.getFullYear(), view.getMonth()).slice(week * 7, week * 7 + 7).map((date, index) => date
-                ? <button key={index} type="button" role="gridcell" data-day={date.getDate()}
+                ? <button key={index} type="button" role="gridcell" data-day={date.getDate()} aria-disabled={dayDisabled(date) ? 'true' : undefined}
                     aria-selected={parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate()}
                     onKeyDown={(event) => gridKeyDown(event, date.getDate())} onClick={() => selectDay(date.getDate())}
-                    className={`aspect-square w-full rounded-md text-sm hover:bg-surface-elevated focus-visible:outline-2 focus-visible:outline-border-focus ${parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate() ? 'bg-accent text-accent-foreground font-bold' : date.toDateString() === new Date().toDateString() ? 'ring-1 ring-border-focus' : ''}`}>{date.getDate()}</button>
+                    className={`aspect-square w-full rounded-md text-sm hover:bg-surface-elevated focus-visible:outline-2 focus-visible:outline-border-focus ${dayDisabled(date) ? 'opacity-40 cursor-not-allowed' : ''} ${parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate() ? 'bg-accent text-accent-foreground font-bold' : date.toDateString() === new Date().toDateString() ? 'ring-1 ring-border-focus' : ''}`}>{date.getDate()}</button>
                 : <span key={index} role="gridcell" aria-disabled="true" />)}
             </div>
           ))}
@@ -217,7 +222,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
             onChange={(event) => setTime('minute', event.currentTarget.value)} className="w-full rounded border border-border bg-surface px-3 py-2" /></label>
         </div>
         <footer className="mt-4 flex justify-between gap-4 border-t border-border pt-4">
-          <button type="button" onClick={() => { const now = new Date(); emit(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()); }}>{labels.today}</button>
+          <button type="button" disabled={dayDisabled(new Date())} onClick={() => { const now = new Date(); if (!dayDisabled(now)) emit(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()); }}>{labels.today}</button>
           <button type="button" onClick={() => onChange('')}>{labels.clear}</button>
         </footer>
       </div>}

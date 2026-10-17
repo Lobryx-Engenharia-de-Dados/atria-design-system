@@ -15,6 +15,8 @@ export interface DatePickerLabels {
 export interface DatePickerProps {
   id?: string;
   value: string;
+  min?: string;
+  max?: string;
   onChange: (value: string) => void;
   label?: ReactNode;
   required?: boolean;
@@ -41,7 +43,7 @@ const parseDate = (value: string) => {
 
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
   {
-    id, value, onChange, label, required, disabled, error, hint, name,
+    id, value, min, max, onChange, label, required, disabled, error, hint, name,
     className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, locale = 'pt-BR', labels
   }, forwardedRef
 ) {
@@ -51,6 +53,12 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
   const popoverRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const parsed = parseDate(value);
+  const minDate = min ? parseDate(min) : null;
+  const maxDate = max ? parseDate(max) : null;
+  const minKey = minDate ? `${minDate.year}-${pad(minDate.month + 1)}-${pad(minDate.day)}` : '';
+  const maxKey = maxDate ? `${maxDate.year}-${pad(maxDate.month + 1)}-${pad(maxDate.day)}` : '';
+  const validRange = !(minKey && maxKey && minKey > maxKey);
+  const disabledDay = (date: Date) => Boolean(validRange && ((minKey && `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}` < minKey) || (maxKey && `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}` > maxKey)));
   const [view, setView] = useState(() => {
     const now = new Date();
     return parsed ? new Date(parsed.year, parsed.month, 1) : new Date(now.getFullYear(), now.getMonth(), 1);
@@ -118,6 +126,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
   }, [open, view]);
 
   const selectDay = (day: number) => {
+    if (disabledDay(new Date(view.getFullYear(), view.getMonth(), day))) return;
     onChange(`${view.getFullYear()}-${pad(view.getMonth() + 1)}-${pad(day)}`);
     setOpen(false);
   };
@@ -168,6 +177,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
   };
   const selectToday = () => {
     const now = new Date();
+    if (disabledDay(now)) return;
     onChange(`${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
     setOpen(false);
   };
@@ -225,9 +235,10 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
                   role="gridcell"
                   data-day={date.getDate()}
                   aria-selected={parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate()}
+                  aria-disabled={disabledDay(date) ? 'true' : undefined}
                   onKeyDown={event => gridKeyDown(event, date.getDate())}
                   onClick={() => selectDay(date.getDate())}
-                  className={`aspect-square w-full rounded-md text-sm hover:bg-surface-elevated focus-visible:outline-2 focus-visible:outline-border-focus ${
+                  className={`aspect-square w-full rounded-md text-sm hover:bg-surface-elevated focus-visible:outline-2 focus-visible:outline-border-focus ${disabledDay(date) ? 'opacity-40 cursor-not-allowed' : ''} ${
                     parsed?.year === date.getFullYear() && parsed.month === date.getMonth() && parsed.day === date.getDate()
                       ? 'bg-accent text-accent-foreground font-bold'
                       : date.toDateString() === new Date().toDateString() ? 'ring-1 ring-border-focus' : ''
@@ -238,7 +249,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
         ))}
       </div>
       <footer className="mt-4 flex justify-between gap-4 border-t border-border pt-4">
-        <button type="button" onClick={selectToday}>{labels.today}</button>
+         <button type="button" onClick={selectToday} disabled={disabledDay(new Date())}>{labels.today}</button>
         <button type="button" onClick={clear}>{labels.clear}</button>
       </footer>
     </div>}

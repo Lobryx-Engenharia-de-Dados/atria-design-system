@@ -41,3 +41,33 @@ await test('external label composition preserves trigger id, class and described
   assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-date-hint external-date-error');
   assert.equal(view.container.querySelector('label[for="external-date"]'), null);
 });
+await test('min and max disable out-of-range days and block emission', async () => {
+  let emitted;
+  const view = render(React.createElement(DatePicker, { value: '2024-02-10', min: '2024-02-05', max: '2024-02-20', onChange: (value) => { emitted = value; }, labels }));
+  fireEvent.click(view.getByRole('button', { name: '10/02/2024' }));
+  const dialog = view.getByRole('dialog');
+  const below = within(dialog).getByRole('gridcell', { name: '4' });
+  const inside = within(dialog).getByRole('gridcell', { name: '15' });
+  const above = within(dialog).getByRole('gridcell', { name: '25' });
+  assert.equal(below.getAttribute('aria-disabled'), 'true');
+  assert.equal(above.getAttribute('aria-disabled'), 'true');
+  assert.equal(inside.getAttribute('aria-disabled'), null);
+  fireEvent.click(below);
+  assert.equal(emitted, undefined);
+  fireEvent.click(inside);
+  assert.equal(emitted, '2024-02-15');
+});
+await test('inverted bounds are ignored', async () => {
+  let emitted;
+  const view = render(React.createElement(DatePicker, { value: '2024-02-10', min: '2024-02-20', max: '2024-02-05', onChange: (value) => { emitted = value; }, labels }));
+  fireEvent.click(view.getByRole('button', { name: '10/02/2024' }));
+  const cell = within(view.getByRole('dialog')).getByRole('gridcell', { name: '25' });
+  assert.equal(cell.getAttribute('aria-disabled'), null);
+  fireEvent.click(cell);
+  assert.equal(emitted, '2024-02-25');
+});
+await test('today is disabled when outside the bounds', async () => {
+  const view = render(React.createElement(DatePicker, { value: '', min: '2000-01-01', max: '2000-12-31', onChange: () => {}, labels }));
+  fireEvent.click(view.getByRole('button', { name: 'Choose date' }));
+  assert.equal(view.getByRole('button', { name: 'Today' }).disabled, true);
+});

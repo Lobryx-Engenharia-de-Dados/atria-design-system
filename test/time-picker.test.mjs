@@ -43,3 +43,19 @@ await test('external label composition preserves trigger id, class and described
   assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-time-hint external-time-error');
   assert.equal(view.container.querySelector('label[for="external-time"]'), null);
 });
+await test('min and max clamp the emitted time', async () => {
+  let emitted;
+  const view = render(React.createElement(TimePicker, { value: '10:00', min: '09:00', max: '11:30', onChange: (value) => { emitted = value; }, labels }));
+  fireEvent.click(view.getByRole('button', { name: '10:00' }));
+  fireEvent.change(view.getByLabelText('Hour'), { target: { value: '7' } });
+  assert.equal(emitted, '09:00');
+  fireEvent.change(view.getByLabelText('Hour'), { target: { value: '12' } });
+  assert.equal(emitted, '11:30');
+});
+await test('inverted time bounds are ignored', async () => {
+  let emitted;
+  const view = render(React.createElement(TimePicker, { value: '10:00', min: '11:00', max: '09:00', onChange: (value) => { emitted = value; }, labels }));
+  fireEvent.click(view.getByRole('button', { name: '10:00' }));
+  fireEvent.change(view.getByLabelText('Hour'), { target: { value: '7' } });
+  assert.equal(emitted, '07:00');
+});
