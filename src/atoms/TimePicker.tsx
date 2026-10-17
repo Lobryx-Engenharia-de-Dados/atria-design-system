@@ -22,6 +22,7 @@ export interface TimePickerProps {
   className?: string;
   triggerClassName?: string;
   'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
   labels: TimePickerLabels;
 }
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -31,7 +32,7 @@ const parse = (value: string) => /^(\d{2}):(\d{2})$/.exec(value);
 
 export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(function TimePicker(
   {
-    id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels
+    id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, 'aria-invalid': externalInvalid, labels
   }, forwardedRef
 ) {
   const generatedId = useId();
@@ -136,7 +137,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
         aria-required={required}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-invalid={!!error}
+        aria-invalid={externalInvalid ?? (error ? true : undefined)}
         aria-describedby={describedBy}
         onClick={toggleOpen}
         className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''} ${triggerClassName}`}

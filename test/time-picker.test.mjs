@@ -7,6 +7,12 @@ const { render, fireEvent, cleanup } = await import('@testing-library/react');
 const { TimePicker, positionDateTimePopover } = await import('../dist/index.js');
 const labels = { placeholder: 'Choose time', hour: 'Hour', minute: 'Minute', clear: 'Clear' };
 const test = async (name, callback) => { await callback(); console.log(`✓ ${name}`); cleanup(); };
+await test('TimePicker forwards external aria-invalid and preserves error-derived invalidity', async () => {
+  const external = render(React.createElement(TimePicker, { value: '', onChange: () => {}, labels, 'aria-invalid': true }));
+  assert.equal(external.getByRole('button').getAttribute('aria-invalid'), 'true'); cleanup();
+  const derived = render(React.createElement(TimePicker, { value: '', onChange: () => {}, labels, error: 'Invalid' }));
+  assert.equal(derived.getByRole('button').getAttribute('aria-invalid'), 'true');
+});
 await test('emits valid HH:mm format and clamps hour 99 to 23', async () => {
   let emitted; const view = render(React.createElement(TimePicker, { value: '00:00', onChange: value => { emitted = value; }, labels }));
   fireEvent.click(view.getByRole('button', { name: '00:00' })); fireEvent.change(view.getByRole('spinbutton', { name: 'Hour' }), { target: { value: '99' } });

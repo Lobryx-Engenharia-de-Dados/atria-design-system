@@ -7,6 +7,12 @@ const { render, fireEvent, cleanup, act, within } = await import('@testing-libra
 const { DateTimePicker, getMonthGrid, positionDateTimePopover } = await import('../dist/index.js');
 const labels = { placeholder: 'Choose date', today: 'Today', clear: 'Clear', previousMonth: 'Previous month', nextMonth: 'Next month', previousYear: 'Previous year', nextYear: 'Next year', month: 'Month', year: 'Year', hour: 'Hour', minute: 'Minute' };
 const test = async (name, callback) => { await callback(); console.log(`✓ ${name}`); cleanup(); };
+await test('DateTimePicker forwards external aria-invalid and preserves error-derived invalidity', async () => {
+  const external = render(React.createElement(DateTimePicker, { value: '', onChange: () => {}, labels, 'aria-invalid': true }));
+  assert.equal(external.getByRole('button').getAttribute('aria-invalid'), 'true'); cleanup();
+  const derived = render(React.createElement(DateTimePicker, { value: '', onChange: () => {}, labels, error: 'Invalid' }));
+  assert.equal(derived.getByRole('button').getAttribute('aria-invalid'), 'true');
+});
 await test('open and close popover', async () => {
   const view = render(React.createElement(DateTimePicker, { value: '', onChange: () => {}, labels }));
   fireEvent.click(view.getByRole('button', { name: 'Choose date' }));
