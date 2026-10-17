@@ -10,6 +10,8 @@ export interface DateTimePickerProps {
   required?: boolean; disabled?: boolean; error?: string; hint?: ReactNode;
   name?: string; className?: string; labels: DateTimePickerLabels;
   locale?: string;
+  triggerClassName?: string;
+  'aria-describedby'?: string;
 }
 export interface PopoverRect { left: number; top: number; width: number; height: number; maxHeight: number }
 
@@ -47,7 +49,7 @@ function parseLocal(value: string) {
 }
 
 export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>(function DateTimePicker(
-  { id, value, onChange, label, required, disabled, error, hint, name, className = '', labels, locale = 'pt-BR' }, forwardedRef
+  { id, value, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels, locale = 'pt-BR' }, forwardedRef
 ) {
   const generatedId = useId();
   const fieldId = id ?? `datetime-${generatedId}`;
@@ -153,7 +155,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
       new Date(parsed.year, parsed.month, parsed.day, parsed.hour, parsed.minute)
     )
     : labels.placeholder;
-  const describedBy = [hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
+  const describedBy = [externalDescribedBy, hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
 
   return (
     <div className={`relative space-y-2 ${className}`}>
@@ -172,7 +174,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
           }
           setOpen(!open);
         }}
-        className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''}`}>
+         className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''} ${triggerClassName}`}>
         {displayValue}
       </button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}

@@ -23,6 +23,8 @@ export interface DatePickerProps {
   hint?: ReactNode;
   name?: string;
   className?: string;
+  triggerClassName?: string;
+  'aria-describedby'?: string;
   locale?: string;
   labels: DatePickerLabels;
 }
@@ -40,7 +42,7 @@ const parseDate = (value: string) => {
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
   {
     id, value, onChange, label, required, disabled, error, hint, name,
-    className = '', locale = 'pt-BR', labels
+    className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, locale = 'pt-BR', labels
   }, forwardedRef
 ) {
   const generatedId = useId();
@@ -153,7 +155,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
     ? new Intl.DateTimeFormat(locale, { dateStyle: 'short' })
       .format(new Date(parsed.year, parsed.month, parsed.day))
     : labels.placeholder;
-  const describedBy = [hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
+  const describedBy = [externalDescribedBy, hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
   const handleTriggerClick = () => {
     if (!open) {
       const current = parseDate(value);
@@ -194,7 +196,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
         aria-invalid={!!error}
         aria-describedby={describedBy}
         onClick={handleTriggerClick}
-        className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''}`}
+        className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''} ${triggerClassName}`}
       >{displayValue}</button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={`${fieldId}-error`} role="alert" className="text-status-error">{error}</p>}
