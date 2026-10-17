@@ -11,7 +11,7 @@ export interface DateTimePickerProps {
   name?: string; className?: string; labels: DateTimePickerLabels;
   locale?: string;
 }
-export interface PopoverRect { left: number; top: number; width: number; height: number }
+export interface PopoverRect { left: number; top: number; width: number; height: number; maxHeight: number }
 
 export function positionDateTimePopover(
   trigger: Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom' | 'width'>,
@@ -21,9 +21,12 @@ export function positionDateTimePopover(
   const width = Math.min(popover.width, Math.max(0, viewport.width - margin * 2));
   const left = Math.min(Math.max(trigger.left, margin), viewport.width - margin - width);
   const below = viewport.height - trigger.bottom - margin;
-  const top = popover.height <= below || below >= trigger.top - margin
-    ? trigger.bottom : Math.max(margin, trigger.top - margin - popover.height);
-  return { left, top, width, height: popover.height };
+  const above = trigger.top - margin;
+  const flipAbove = popover.height > below && above > below;
+  const maxHeight = Math.max(0, Math.min(viewport.height - margin * 2, flipAbove ? Math.max(0, above - margin) : below));
+  const height = Math.min(popover.height, maxHeight);
+  const top = flipAbove ? trigger.top - margin - height : trigger.bottom;
+  return { left, top, width, height, maxHeight };
 }
 
 export function getMonthGrid(year: number, month: number): Array<Date | null> {
@@ -103,7 +106,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
       const anchor = triggerRef.current.getBoundingClientRect();
       const size = popoverRef.current.getBoundingClientRect();
       const position = positionDateTimePopover(anchor, size, { width: innerWidth, height: innerHeight });
-      Object.assign(popoverRef.current.style, { left: `${position.left}px`, top: `${position.top}px`, width: `${position.width}px` });
+      Object.assign(popoverRef.current.style, { left: `${position.left}px`, top: `${position.top}px`, width: `${position.width}px`, maxHeight: `${position.maxHeight}px` });
     };
     updatePosition();
     window.addEventListener('scroll', updatePosition, { capture: true, passive: true });
@@ -174,7 +177,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
       </button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={`${fieldId}-error`} role="alert" className="text-status-error">{error}</p>}
-      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 w-80 rounded-lg border border-border bg-surface p-4 text-foreground shadow-card">
+      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 w-80 overflow-y-auto rounded-lg border border-border bg-surface p-4 text-foreground shadow-card">
         <header className="flex items-center justify-between">
           <button type="button" aria-label={labels.previousYear} onClick={() => setView(new Date(view.getFullYear() - 1, view.getMonth(), 1))}>«</button>
           <button type="button" aria-label={labels.previousMonth} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))}>‹</button>

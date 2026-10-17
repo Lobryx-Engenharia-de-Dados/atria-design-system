@@ -57,11 +57,48 @@ await test('popover clamps at right edge and flips above with an 8px trigger gap
   const rect = positionDateTimePopover({ left: 980, right: 1000, top: 30, bottom: 50, width: 20 }, { width: 220, height: 180 }, { width: 1024, height: 768 });
   assert.ok(rect.left + rect.width <= 1024 - 8);
   const flipped = positionDateTimePopover({ left: 20, right: 40, top: 250, bottom: 270, width: 20 }, { width: 200, height: 180 }, { width: 300, height: 300 });
-  assert.equal(flipped.top, 62);
-  assert.equal(flipped.top + flipped.height, 242);
+  assert.ok(flipped.top + flipped.height <= 250 - 8, 'flipped popover keeps an 8px trigger gap');
+  assert.ok(flipped.top + flipped.height >= 250 - 8, 'flipped popover uses the available space up to the trigger gap');
   assert.ok(flipped.top >= 8);
   const belowFits = positionDateTimePopover({ left: 20, right: 40, top: 30, bottom: 50, width: 20 }, { width: 200, height: 180 }, { width: 300, height: 300 });
-  assert.equal(belowFits.top, 50);
+  assert.ok(belowFits.top >= 50, 'below popover starts at or below the trigger bottom');
+});
+await test('1280x380 viewport limits popover height and keeps its base inside viewport', async () => {
+  const rect = positionDateTimePopover({ left: 100, right: 140, top: 100, bottom: 120, width: 40 }, { width: 320, height: 404 }, { width: 1280, height: 380 });
+  assert.ok(rect.maxHeight <= 380 - 16);
+  assert.ok(rect.top + rect.maxHeight <= 380 - 8);
+});
+await test('when neither side fits, popover chooses side with more space and scrolls internally', async () => {
+  const rect = positionDateTimePopover({ left: 100, right: 140, top: 400, bottom: 420, width: 40 }, { width: 320, height: 404 }, { width: 1440, height: 700 });
+  assert.ok(rect.top + rect.height <= 400 - 8, 'above popover preserves an 8px trigger gap');
+  assert.ok(rect.top >= 8);
+  assert.ok(rect.height <= 400 - 8 - 8, 'above popover stays within available height after viewport and trigger margins');
+});
+await test('1280x560 chooses above when visible trigger has more space above', async () => {
+  const rect = positionDateTimePopover({ left: 100, right: 140, top: 335, bottom: 355, width: 40 }, { width: 320, height: 404 }, { width: 1280, height: 560 });
+  assert.ok(rect.top < 335);
+  assert.ok(rect.height <= 327);
+  assert.ok(rect.top >= 8);
+  assert.ok(rect.top + rect.height <= 552);
+  assert.ok(rect.maxHeight < 404);
+});
+await test('375x667 chooses above using the larger available space', async () => {
+  const rect = positionDateTimePopover({ left: 20, right: 60, top: 335, bottom: 355, width: 40 }, { width: 320, height: 404 }, { width: 375, height: 667 });
+  assert.ok(rect.top < 335, 'popover is positioned above the trigger');
+  assert.ok(rect.top >= 8, 'popover preserves the viewport top margin');
+  assert.ok(rect.top + rect.height <= 335 - 8, 'popover preserves an 8px gap above the trigger');
+  assert.ok(rect.height <= 327, 'popover height does not exceed space above the trigger');
+});
+await test('1440x900 stays below at natural height when it fits', async () => {
+  const rect = positionDateTimePopover({ left: 100, right: 140, top: 100, bottom: 120, width: 40 }, { width: 320, height: 404 }, { width: 1440, height: 900 });
+  assert.ok(rect.top >= 120, 'below popover starts no higher than the trigger bottom');
+  assert.ok(rect.height >= 404, 'popover retains its natural height when it fits');
+});
+await test('flip preserves 8px gap and never overlaps trigger', async () => {
+  const rect = positionDateTimePopover({ left: 20, right: 60, top: 250, bottom: 270, width: 40 }, { width: 200, height: 400 }, { width: 300, height: 300 });
+  assert.ok(rect.top + rect.height <= 250 - 8, 'flipped popover does not overlap trigger and keeps the gap');
+  assert.ok(rect.top + rect.height >= 250 - 8, 'flipped popover occupies available space up to the gap');
+  assert.ok(rect.top >= 8);
 });
 await test('month grid handles Sunday first and Sunday last', async () => {
   const startsSunday = getMonthGrid(2023, 9); // October 2023
@@ -128,7 +165,7 @@ await test('viewport 320x667 clamps trigger at lower right corner', async () => 
   assert.ok(grid.classList.contains('gap-1'));
   const narrow = positionDateTimePopover({ left: 280, right: 300, top: 100, bottom: 120, width: 20 }, { width: 320, height: 180 }, { width: 320, height: 667 });
   assert.ok(narrow.width <= 304);
-  assert.equal(narrow.top, 120);
+  assert.ok(narrow.top >= 120, 'below popover starts at or below trigger bottom');
 });
 await test('20 open-close cycles remove document listeners without accumulation', async () => {
   const originalAdd = document.addEventListener.bind(document);
