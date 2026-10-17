@@ -10,6 +10,8 @@ export interface TimePickerLabels {
 export interface TimePickerProps {
   id?: string;
   value: string;
+  min?: string;
+  max?: string;
   onChange: (value: string) => void;
   label?: ReactNode;
   required?: boolean;
@@ -29,7 +31,7 @@ const parse = (value: string) => /^(\d{2}):(\d{2})$/.exec(value);
 
 export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(function TimePicker(
   {
-    id, value, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels
+    id, value, min, max, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels
   }, forwardedRef
 ) {
   const generatedId = useId();
@@ -41,6 +43,9 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
   const matched = parse(value);
   const hour = matched ? Number(matched[1]) : 0;
   const minute = matched ? Number(matched[2]) : 0;
+  const parseBound = (bound?: string) => { const m = bound ? parse(bound) : null; return m && Number(m[1]) < 24 && Number(m[2]) < 60 ? Number(m[1]) * 60 + Number(m[2]) : null; };
+  const minMinute = parseBound(min), maxMinute = parseBound(max);
+  const validRange = !(minMinute !== null && maxMinute !== null && minMinute > maxMinute);
   useEffect(() => {
     if (!open) return;
     const outside = (event: PointerEvent) => {
@@ -102,9 +107,10 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
   }, [open]);
   const update = (part: 'hour' | 'minute', raw: string) => {
     const n = raw === '' ? 0 : Number(raw);
-    onChange(
-      `${pad(clamp(part === 'hour' ? n : hour, 23))}:${pad(clamp(part === 'minute' ? n : minute, 59))}`
-    );
+    let total = clamp(part === 'hour' ? n : hour, 23) * 60 + clamp(part === 'minute' ? n : minute, 59);
+    if (validRange && minMinute !== null) total = Math.max(total, minMinute);
+    if (validRange && maxMinute !== null) total = Math.min(total, maxMinute);
+    onChange(`${pad(Math.floor(total / 60))}:${pad(total % 60)}`);
   };
   const display = matched
     ? `${pad(hour)}:${pad(minute)}`

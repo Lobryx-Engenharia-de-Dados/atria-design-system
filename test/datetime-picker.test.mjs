@@ -220,3 +220,15 @@ await test('external label composition preserves trigger id, class and described
   assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-datetime-hint external-datetime-error');
   assert.equal(view.container.querySelector('label[for="external-datetime"]'), null);
 });
+await test('min and max disable out-of-range days in the datetime grid', async () => {
+  let emitted;
+  const view = render(React.createElement(DateTimePicker, { value: '2024-02-10T10:00', min: '2024-02-05T00:00', max: '2024-02-20T23:59', onChange: (value) => { emitted = value; }, labels }));
+  fireEvent.click(view.getByRole('button', { name: '10/02/2024, 10:00' }));
+  const dialog = view.getByRole('dialog');
+  assert.equal(within(dialog).getByRole('gridcell', { name: '4' }).getAttribute('aria-disabled'), 'true');
+  assert.equal(within(dialog).getByRole('gridcell', { name: '25' }).getAttribute('aria-disabled'), 'true');
+  fireEvent.click(within(dialog).getByRole('gridcell', { name: '4' }));
+  assert.equal(emitted, undefined);
+  fireEvent.click(within(dialog).getByRole('gridcell', { name: '15' }));
+  assert.equal(emitted, '2024-02-15T10:00');
+});
