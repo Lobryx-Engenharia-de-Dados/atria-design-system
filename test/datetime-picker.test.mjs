@@ -213,3 +213,10 @@ await test('year arrows jump a year and month arrows still navigate months', asy
   fireEvent.click(view.getByRole('button', { name: 'Previous month' }));
   assert.equal(view.getByRole('grid').getAttribute('aria-label'), 'fevereiro de 2024');
 });
+await test('external label composition preserves trigger id, class and described-by ids', async () => {
+  const view = render(React.createElement(DateTimePicker, { id: 'external-datetime', value: '', onChange: () => {}, labels, triggerClassName: 'local-trigger', 'aria-describedby': 'external-help', hint: 'Hint', error: 'Error' }));
+  const trigger = view.getByRole('button');
+  assert.equal(trigger.id, 'external-datetime'); assert.ok(trigger.classList.contains('local-trigger'));
+  assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-datetime-hint external-datetime-error');
+  assert.equal(view.container.querySelector('label[for="external-datetime"]'), null);
+});

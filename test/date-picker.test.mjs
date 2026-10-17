@@ -34,3 +34,10 @@ await test('keyboard navigation selects date and shared position helper clamps a
   const rect = (await import('../dist/index.js')).positionDateTimePopover({ left: 980, right: 1000, top: 335, bottom: 355, width: 20 }, { width: 320, height: 404 }, { width: 1024, height: 560 });
   assert.ok(rect.left + rect.width <= 1016); assert.ok(rect.maxHeight <= 544); assert.ok(rect.top < 335);
 });
+await test('external label composition preserves trigger id, class and described-by ids', async () => {
+  const view = render(React.createElement(DatePicker, { id: 'external-date', value: '', onChange: () => {}, labels, triggerClassName: 'local-trigger', 'aria-describedby': 'external-help', hint: 'Hint', error: 'Error' }));
+  const trigger = view.getByRole('button');
+  assert.equal(trigger.id, 'external-date'); assert.ok(trigger.classList.contains('local-trigger'));
+  assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-date-hint external-date-error');
+  assert.equal(view.container.querySelector('label[for="external-date"]'), null);
+});

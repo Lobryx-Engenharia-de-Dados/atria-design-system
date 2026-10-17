@@ -36,3 +36,10 @@ await test('reuses shared popover clamping and flipping geometry', async () => {
   const rect = positionDateTimePopover({ left: 980, right: 1000, top: 250, bottom: 270, width: 20 }, { width: 320, height: 400 }, { width: 1024, height: 300 });
   assert.ok(rect.left + rect.width <= 1016); assert.ok(rect.top >= 8); assert.ok(rect.maxHeight <= 284); assert.ok(rect.top + rect.height <= 242);
 });
+await test('external label composition preserves trigger id, class and described-by ids', async () => {
+  const view = render(React.createElement(TimePicker, { id: 'external-time', value: '', onChange: () => {}, labels, triggerClassName: 'local-trigger', 'aria-describedby': 'external-help', hint: 'Hint', error: 'Error' }));
+  const trigger = view.getByRole('button');
+  assert.equal(trigger.id, 'external-time'); assert.ok(trigger.classList.contains('local-trigger'));
+  assert.equal(trigger.getAttribute('aria-describedby'), 'external-help external-time-hint external-time-error');
+  assert.equal(view.container.querySelector('label[for="external-time"]'), null);
+});

@@ -18,6 +18,8 @@ export interface TimePickerProps {
   hint?: ReactNode;
   name?: string;
   className?: string;
+  triggerClassName?: string;
+  'aria-describedby'?: string;
   labels: TimePickerLabels;
 }
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -27,7 +29,7 @@ const parse = (value: string) => /^(\d{2}):(\d{2})$/.exec(value);
 
 export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(function TimePicker(
   {
-    id, value, onChange, label, required, disabled, error, hint, name, className = '', labels
+    id, value, onChange, label, required, disabled, error, hint, name, className = '', triggerClassName = '', 'aria-describedby': externalDescribedBy, labels
   }, forwardedRef
 ) {
   const generatedId = useId();
@@ -107,7 +109,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
   const display = matched
     ? `${pad(hour)}:${pad(minute)}`
     : labels.placeholder;
-  const describedBy = [hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
+  const describedBy = [externalDescribedBy, hint ? `${fieldId}-hint` : '', error ? `${fieldId}-error` : ''].filter(Boolean).join(' ') || undefined;
   const closeAndClear = () => onChange('');
   const setHour = (event: React.ChangeEvent<HTMLInputElement>) => update('hour', event.currentTarget.value);
   const setMinute = (event: React.ChangeEvent<HTMLInputElement>) => update('minute', event.currentTarget.value);
@@ -131,7 +133,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
         aria-invalid={!!error}
         aria-describedby={describedBy}
         onClick={toggleOpen}
-        className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''}`}
+        className={`w-full rounded-lg border border-border bg-surface px-3 py-2 text-left text-foreground focus-visible:outline-2 focus-visible:outline-border-focus ${disabled ? 'opacity-50' : ''} ${triggerClassName}`}
       >{display}</button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={`${fieldId}-error`} role="alert" className="text-status-error">{error}</p>}
