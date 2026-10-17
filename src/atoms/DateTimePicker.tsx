@@ -174,7 +174,7 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
       </button>
       {hint && <p id={`${fieldId}-hint`} className="text-xs text-foreground-muted">{hint}</p>}
       {error && <p id={`${fieldId}-error`} role="alert" className="text-status-error">{error}</p>}
-      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 rounded-lg border border-border bg-surface p-3 text-foreground shadow-card">
+      {open && <div ref={popoverRef} role="dialog" className="fixed z-50 rounded-lg border border-border bg-surface p-4 text-foreground shadow-card">
         <header className="flex items-center justify-between">
           <button type="button" aria-label={labels.previousYear} onClick={() => setView(new Date(view.getFullYear() - 1, view.getMonth(), 1))}>«</button>
           <button type="button" aria-label={labels.previousMonth} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))}>‹</button>
@@ -204,13 +204,13 @@ export const DateTimePicker = forwardRef<HTMLButtonElement, DateTimePickerProps>
             </div>
           ))}
         </div>
-        <div className="flex gap-2">
-          <label>{labels.hour}<input aria-label={labels.hour} type="number" min="0" max="23" value={parsed?.hour ?? 0}
-            onChange={(event) => setTime('hour', event.currentTarget.value)} className="w-16 rounded border border-border bg-surface" /></label>
-          <label>{labels.minute}<input aria-label={labels.minute} type="number" min="0" max="59" value={parsed?.minute ?? 0}
-            onChange={(event) => setTime('minute', event.currentTarget.value)} className="w-16 rounded border border-border bg-surface" /></label>
+        <div className="mt-4 flex gap-4">
+          <label className="flex-1"><span className="block text-xs font-black uppercase tracking-widest text-foreground/70">{labels.hour}</span><input aria-label={labels.hour} type="number" min="0" max="23" value={parsed?.hour ?? 0}
+            onChange={(event) => setTime('hour', event.currentTarget.value)} className="w-full rounded border border-border bg-surface px-3 py-2" /></label>
+          <label className="flex-1"><span className="block text-xs font-black uppercase tracking-widest text-foreground/70">{labels.minute}</span><input aria-label={labels.minute} type="number" min="0" max="59" value={parsed?.minute ?? 0}
+            onChange={(event) => setTime('minute', event.currentTarget.value)} className="w-full rounded border border-border bg-surface px-3 py-2" /></label>
         </div>
-        <footer className="flex justify-between">
+        <footer className="mt-4 flex justify-between gap-4 border-t border-border pt-4">
           <button type="button" onClick={() => { const now = new Date(); emit(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()); }}>{labels.today}</button>
           <button type="button" onClick={() => onChange('')}>{labels.clear}</button>
         </footer>
