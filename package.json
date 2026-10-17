@@ -3,7 +3,7 @@
     "node": ">=24.21.0 <25"
   },
   "name": "@lobryx/design-system",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": false,
   "type": "module",
   "repository": {
