@@ -27,6 +27,11 @@ raios, sombras, duração e easing também são consumidos somente por utilities
 geradas a partir do tema. O contrato deve funcionar nos temas padrão dark e
 `[data-theme='light']`, sem criar um segundo tema.
 
+Os tokens `--color-chart-1` e `--color-chart-2` compõem a paleta canônica de
+séries: laranja e azul, respectivamente. Ambos os tons se adaptam a dark/light e
+mantêm contraste gráfico mínimo de 3:1 sobre `surface-elevated` e `background`;
+azul-marinho de marca não é permitido como série no tema claro.
+
 ### Contrato de espaçamento
 
 `--spacing: 0.25rem` é a base oficial da escala de espaçamento do Tailwind v4;
