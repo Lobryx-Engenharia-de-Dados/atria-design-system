@@ -116,6 +116,13 @@ com `--color-surface` e `--color-background` em cada tema.
 
 O valor primitivo interno correspondente é `--_ds-skeleton`.
 
+### Paleta de séries dos gráficos
+
+`--color-chart-1` é a série laranja e `--color-chart-2` é a série azul. Os tons
+se adaptam aos temas dark/light para manter contraste mínimo de 3:1 sobre o
+fundo e cartões. Não use `--color-primary` (azul-marinho da marca) como cor de
+série em dashboards escuros.
+
 ## Consumo
 
 Instale ou vincule o pacote localmente com `link:../../design-system` e importe os

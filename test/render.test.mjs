@@ -228,7 +228,7 @@ for (const token of [
   '--color-accent-foreground', '--color-accent-text', '--color-inverse', '--color-status-success',
   '--color-status-success-foreground', '--color-status-warning-foreground',
   '--color-status-error-foreground', '--color-status-info-foreground',
-  '--color-chart-1', '--radius-lg', '--spacing', '--space-4', '--shadow-card', '--font-sans',
+  '--color-chart-1', '--color-chart-2', '--radius-lg', '--spacing', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
 ]) {
   assert.match(theme, new RegExp(`${token}:`));
@@ -243,7 +243,7 @@ for (const token of [
   '--_ds-background', '--_ds-surface', '--_ds-skeleton', '--_ds-border', '--_ds-foreground',
   '--_ds-accent', '--_ds-accent-text', '--_ds-status-success', '--_ds-status-success-foreground',
   '--_ds-status-warning-foreground', '--_ds-status-error-foreground', '--_ds-status-info-foreground',
-  '--_ds-status-success-bg', '--_ds-chart-1'
+  '--_ds-status-success-bg', '--_ds-chart-1', '--_ds-chart-2'
 ]) {
   assert.match(darkTheme, new RegExp(`${token}:`));
   assert.match(lightTheme, new RegExp(`${token}:`));
@@ -272,6 +272,23 @@ const contrast = (foreground, background) => {
   return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
     / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
 };
+const chartSeriesColors = [
+  ['dark', darkTheme, '#ff8700', '#60a5fa'],
+  ['light', lightTheme, '#9a3412', '#1d4ed8'],
+];
+for (const [name, themeBlock, orange, blue] of chartSeriesColors) {
+  const surface = parseHex(themeBlock, '--_ds-surface-elevated');
+  const background = parseHex(themeBlock, '--_ds-background');
+  const chartOrange = parseHex(themeBlock, '--_ds-chart-1');
+  const chartBlue = parseHex(themeBlock, '--_ds-chart-2');
+  assert.equal(chartOrange, orange, `${name} chart-1 must use the accessible orange`);
+  assert.equal(chartBlue, blue, `${name} chart-2 must use accessible blue, not navy`);
+  assert.ok(surface && background && chartOrange && chartBlue);
+  assert.ok(contrast(chartOrange, surface) >= 3, `${name} chart-1 must meet 3:1 on cards`);
+  assert.ok(contrast(chartOrange, background) >= 3, `${name} chart-1 must meet 3:1 on background`);
+  assert.ok(contrast(chartBlue, surface) >= 3, `${name} chart-2 must meet 3:1 on cards`);
+  assert.ok(contrast(chartBlue, background) >= 3, `${name} chart-2 must meet 3:1 on background`);
+}
 for (const themeBlock of [darkTheme, lightTheme]) {
   for (const status of statusColors) {
     const foreground = parseHex(themeBlock, `--_ds-status-${status}-foreground`);
