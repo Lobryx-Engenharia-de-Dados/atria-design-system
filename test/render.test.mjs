@@ -93,7 +93,7 @@ const renderShell = (matchMediaMatches, sidebarOpen) => {
   };
   return renderToStaticMarkup(React.createElement(
   AppShell,
-  { sidebarOpen, sidebar: React.createElement(AppSidebar, { brand: React.createElement(Wordmark, { name: 'Lobryx' }), items: [{ label: 'Home', href: '/', active: true }] }), topbar: React.createElement(AppTopbar, { title: 'Overview' }) },
+  { sidebarOpen, sidebar: React.createElement(AppSidebar, { brand: React.createElement(Wordmark, { name: 'Lobryx' }), items: [{ label: 'Home', href: '/', active: true, icon: React.createElement('span', null, 'home icon') }, { label: 'Reports', href: '/reports', icon: React.createElement('span', null, 'reports icon') }] }), topbar: React.createElement(AppTopbar, { title: 'Overview' }) },
   React.createElement(Container, { size: 'lg' }, React.createElement(PageHeader, { eyebrow: 'Workspace', title: 'Overview', subtitle: 'Your activity' }))
   ));
 };
@@ -310,8 +310,14 @@ for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
     `${name} skeleton contrast against background must meet 3:1`);
 }
 
-assert.match(desktopShellMarkup, /aria-current="page"[^>]*class="[^"]*text-accent-text/,
-  'active sidebar item must use the AA-safe accent text token');
+assert.match(desktopShellMarkup, /aria-current="page"[^>]*class="[^"]*bg-accent\/10[^\"]*text-foreground/,
+  'active sidebar item must use an accent surface and foreground text');
+assert.match(desktopShellMarkup, /class="[^"]*text-accent-text[^"]*"><span>home icon/,
+  'active sidebar icon must use the accessible accent token');
+assert.match(desktopShellMarkup, /group-hover:text-accent-text/,
+  'inactive sidebar icon must turn accent on hover');
+assert.match(desktopShellMarkup, /hover:bg-primary-light/,
+  'inactive sidebar item must receive a subtle hover surface');
 
 for (const [name, themeBlock] of [['dark', darkTheme], ['light', lightTheme]]) {
   const accentText = parseHex(themeBlock, '--_ds-accent-text');
