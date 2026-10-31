@@ -17,6 +17,8 @@ acessíveis e visualmente coerentes sem duplicar decisões de layout.
    vazio, erro e carregamento explícitos e acionáveis.
 4. **Tabelas:** o conjunto composável fornece tabela semântica, cabeçalho,
    células, caption e densidade confortável ou compacta.
+5. **Navegação:** `AppSidebar` define o estado padrão, hover e seleção dos itens;
+   cada sistema fornece seus rótulos, ícones, rotas e regras de acesso.
 
 ## Contrato de tokens
 
@@ -89,6 +91,9 @@ Assim, a lib é a fonte única da escala sem alterar os valores visuais atuais.
   `StateAction` sempre são renderizados pelo `Button` como `<button>` ou `<a>`.
 - Os temas dark e light continuam suportados sem seletores ou temas paralelos.
 - Loading é anunciado sem duplicar o conteúdo decorativo do `Skeleton`.
+- Itens de navegação inativos mantêm texto neutro; hover colore o ícone com o
+  acento. O item selecionado usa fundo de acento discreto, ícone laranja,
+  foreground do tema e `aria-current="page"`.
 
 ## Backlog e fora de escopo
 

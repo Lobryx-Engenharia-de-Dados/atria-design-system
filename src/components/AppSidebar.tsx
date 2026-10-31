@@ -16,6 +16,13 @@ export interface AppSidebarProps {
   onNavigate?: () => void;
 }
 
+export function getAppSidebarItemClassNames(active: boolean) {
+  return {
+    link: `group relative flex items-center gap-3 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 ${active ? 'border-accent bg-accent/10 text-foreground' : 'border-transparent text-foreground-muted hover:bg-primary-light hover:text-foreground'}`,
+    icon: `flex h-[18px] w-[18px] shrink-0 items-center justify-center ${active ? 'text-accent-text' : 'text-foreground-muted group-hover:text-accent-text'}`,
+  };
+}
+
 export function AppSidebar({ brand, groups, items, footer, className = '', onNavigate }: AppSidebarProps) {
   return (
     <div className={`flex h-full min-h-0 flex-col border-r border-border bg-surface text-foreground ${className}`}>
@@ -24,19 +31,22 @@ export function AppSidebar({ brand, groups, items, footer, className = '', onNav
         {groups}
         {items && (
           <ul className="space-y-2">
-            {items.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={onNavigate}
-                  aria-current={item.active ? 'page' : undefined}
-                  className={`relative flex items-center gap-3 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 ${item.active ? 'border-accent bg-accent/10 text-accent-text' : 'border-transparent text-foreground-muted hover:bg-primary-light hover:text-foreground'}`}
-                >
-                  {item.icon && <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center">{item.icon}</span>}
-                  <span>{item.label}</span>
-                </a>
-              </li>
-            ))}
+            {items.map((item) => {
+              const classes = getAppSidebarItemClassNames(Boolean(item.active));
+              return (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    onClick={onNavigate}
+                    aria-current={item.active ? 'page' : undefined}
+                    className={classes.link}
+                  >
+                    {item.icon && <span className={classes.icon}>{item.icon}</span>}
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         )}
       </nav>

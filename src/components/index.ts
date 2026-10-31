@@ -1,6 +1,6 @@
 export { AppShell } from './AppShell.js';
 export type { AppShellProps } from './AppShell.js';
-export { AppSidebar } from './AppSidebar.js';
+export { AppSidebar, getAppSidebarItemClassNames } from './AppSidebar.js';
 export type { AppSidebarItem, AppSidebarProps } from './AppSidebar.js';
 export { AppTopbar } from './AppTopbar.js';
 export type { AppTopbarProps } from './AppTopbar.js';
