@@ -15,6 +15,13 @@ const markup = renderToStaticMarkup(
   )
 );
 const enabledLinkMarkup = renderToStaticMarkup(React.createElement(Button, { href: '/details' }, 'Details'));
+const buttonShapeMarkup = renderToStaticMarkup(React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(Button, null, 'Default shape'),
+  React.createElement(Button, { shape: 'pill' }, 'Pill shape'),
+  React.createElement(Button, { href: '/details', shape: 'pill' }, 'Pill link')
+));
 const disabledLinkMarkup = renderToStaticMarkup(React.createElement(
   Button,
   { href: '/details', disabled: true, onClick: () => { throw new Error('disabled link clicked'); } },
@@ -130,6 +137,10 @@ assert.match(markup, /Revenue/);
 assert.match(markup, /aria-hidden="true"/);
 assert.match(markup, /animate-pulse/);
 assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
+assert.match(buttonShapeMarkup, /class="[^"]*rounded-md[^"]*">Default shape<\/button>/);
+assert.match(buttonShapeMarkup, /class="[^"]*rounded-pill[^"]*">Pill shape<\/button>/);
+assert.match(buttonShapeMarkup, /class="[^"]*rounded-pill[^"]*" href="\/details">Pill link<\/a>/);
+assert.doesNotMatch(buttonShapeMarkup, /shape="pill"/);
 assert.match(enabledLinkMarkup, /<a[^>]*href="\/details"[^>]*>Details<\/a>/);
 assert.match(disabledLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*tabindex="-1"[^>]*>Details<\/a>/);
 assert.doesNotMatch(disabledLinkMarkup, /href="\/details"/);
@@ -218,6 +229,7 @@ const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8
 const themeBlock = theme.match(/@theme\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
 const spacing = themeBlock.match(/--spacing:\s*([0-9.]+)rem/)?.[1];
 assert.equal(spacing, '0.25', 'the Tailwind spacing base must remain 0.25rem');
+assert.match(themeBlock, /--radius-pill:\s*9999px/);
 for (const step of [1, 2, 3, 4, 5, 6, 8]) {
   const value = themeBlock.match(new RegExp(`--space-${step}:\\s*([0-9.]+)rem`))?.[1];
   assert.equal(value, String(Number(spacing) * step), `--space-${step} must equal ${step} × --spacing`);
@@ -228,7 +240,7 @@ for (const token of [
   '--color-accent-foreground', '--color-accent-text', '--color-inverse', '--color-status-success',
   '--color-status-success-foreground', '--color-status-warning-foreground',
   '--color-status-error-foreground', '--color-status-info-foreground',
-  '--color-chart-1', '--color-chart-2', '--radius-lg', '--spacing', '--space-4', '--shadow-card', '--font-sans',
+  '--color-chart-1', '--color-chart-2', '--radius-lg', '--radius-pill', '--spacing', '--space-4', '--shadow-card', '--font-sans',
   '--font-headings', '--duration-normal', '--ease-standard'
 ]) {
   assert.match(theme, new RegExp(`${token}:`));

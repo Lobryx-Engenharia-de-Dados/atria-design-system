@@ -2,12 +2,14 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'reac
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonShape = 'default' | 'pill';
 
 export type ButtonProps =
-  | (ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant; size?: ButtonSize; loading?: boolean; icon?: ReactNode; href?: never })
+  | (ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant; size?: ButtonSize; shape?: ButtonShape; loading?: boolean; icon?: ReactNode; href?: never })
   | (Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'className'> & {
     variant?: ButtonVariant;
     size?: ButtonSize;
+    shape?: ButtonShape;
     loading?: boolean;
     icon?: ReactNode;
     className?: string;
@@ -27,14 +29,18 @@ const sizeClasses: Record<ButtonSize, string> = {
   md: 'px-4 py-3 text-sm',
   lg: 'px-5 py-3 text-base'
 };
+const shapeClasses: Record<ButtonShape, string> = {
+  default: 'rounded-md',
+  pill: 'rounded-pill'
+};
 
 export function Button(props: ButtonProps) {
-  const { className = '', variant = 'primary', size = 'md', loading = false, icon } = props;
-  const classes = `inline-flex min-h-11 items-center justify-center gap-2 rounded-md font-sans font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+  const { className = '', variant = 'primary', size = 'md', shape = 'default', loading = false, icon } = props;
+  const classes = `inline-flex min-h-11 items-center justify-center gap-2 ${shapeClasses[shape]} font-sans font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
   const content = <>{loading && <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current animate-pulse" />}{icon}{props.children}</>;
 
   if ('href' in props && props.href !== undefined) {
-    const { href, disabled, onClick, className: _className, variant: _variant, size: _size, loading: _loading, icon: _icon, children: _children, ...anchorProps } = props;
+    const { href, disabled, onClick, className: _className, variant: _variant, size: _size, shape: _shape, loading: _loading, icon: _icon, children: _children, ...anchorProps } = props;
     const inert = Boolean(disabled || loading);
     return (
       <a
@@ -49,7 +55,7 @@ export function Button(props: ButtonProps) {
     );
   }
 
-  const { disabled, className: _className, variant: _variant, size: _size, loading: _loading, icon: _icon, children: _children, ...buttonProps } = props;
+  const { disabled, className: _className, variant: _variant, size: _size, shape: _shape, loading: _loading, icon: _icon, children: _children, ...buttonProps } = props;
   return (
     <button
       className={classes}

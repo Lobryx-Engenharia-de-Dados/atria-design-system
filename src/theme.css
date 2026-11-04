@@ -132,6 +132,7 @@
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
+  --radius-pill: 9999px;
   /* Tailwind v4 derives p-*, m-*, gap-* and related utilities from this base. */
   --spacing: 0.25rem;
   --space-1: 0.25rem;

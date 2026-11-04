@@ -1,7 +1,7 @@
 export { Badge } from './Badge.js';
 export type { BadgeProps, BadgeStatus, BadgeVariant } from './Badge.js';
 export { Button } from './Button.js';
-export type { ButtonProps, ButtonVariant, ButtonSize } from './Button.js';
+export type { ButtonProps, ButtonVariant, ButtonSize, ButtonShape } from './Button.js';
 export type { StateAction } from './StateAction.js';
 export { Card } from './Card.js';
 export type { CardProps } from './Card.js';
