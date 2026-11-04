@@ -34,7 +34,7 @@ export function Dashboard() {
 
 ### Catálogo de átomos
 
-- `Button`: ação interativa com variantes semânticas, tamanhos `sm`/`md`/`lg` e formato `shape` (`default` ou `pill`). `default` preserva o raio `rounded-md`; `pill` usa o token público `--radius-pill`.
+- `Button`: ação interativa com variantes semânticas, tamanhos `sm`/`md`/`lg`/`xl` e formato `shape` (`default` ou `pill`). `xl` oferece altura mínima de 56 px para CTAs de destaque; `default` preserva o raio `rounded-md` e `pill` usa o token público `--radius-pill`.
 - `Badge`: indicador semântico com `variant` (`neutral`, `success`, `warning`, `error`, `info` ou `outline`) e `icon` opcional.
 - `TextField`: campo com `label`, `hint`, `icon` e `error` acessíveis.
 - `Textarea`: campo multilinha com `label`, `hint` e `error` acessíveis.

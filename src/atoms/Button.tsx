@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 export type ButtonShape = 'default' | 'pill';
 
 export type ButtonProps =
@@ -24,7 +24,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost: 'bg-transparent text-foreground-secondary hover:bg-surface hover:text-foreground',
   danger: 'bg-status-error text-status-error-foreground hover:bg-status-error/90'
 };
-const sizeClasses: Record<ButtonSize, string> = {
+const sizeClasses: Record<Exclude<ButtonSize, 'xl'>, string> = {
   sm: 'px-3 py-2 text-xs',
   md: 'px-4 py-3 text-sm',
   lg: 'px-5 py-3 text-base'
@@ -36,7 +36,8 @@ const shapeClasses: Record<ButtonShape, string> = {
 
 export function Button(props: ButtonProps) {
   const { className = '', variant = 'primary', size = 'md', shape = 'default', loading = false, icon } = props;
-  const classes = `inline-flex min-h-11 items-center justify-center gap-2 ${shapeClasses[shape]} font-sans font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+  const sizeClass = size === 'xl' ? 'box-border min-h-14 px-6 py-3 text-base' : sizeClasses[size];
+  const classes = `inline-flex min-h-11 items-center justify-center gap-2 ${shapeClasses[shape]} font-sans font-semibold transition-colors duration-normal ease-standard focus-visible:outline-2 focus-visible:outline-border-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${sizeClass} ${variantClasses[variant]} ${className}`;
   const content = <>{loading && <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current animate-pulse" />}{icon}{props.children}</>;
 
   if ('href' in props && props.href !== undefined) {

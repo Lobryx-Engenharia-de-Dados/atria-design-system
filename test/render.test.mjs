@@ -20,7 +20,8 @@ const buttonShapeMarkup = renderToStaticMarkup(React.createElement(
   null,
   React.createElement(Button, null, 'Default shape'),
   React.createElement(Button, { shape: 'pill' }, 'Pill shape'),
-  React.createElement(Button, { href: '/details', shape: 'pill' }, 'Pill link')
+  React.createElement(Button, { href: '/details', shape: 'pill' }, 'Pill link'),
+  React.createElement(Button, { size: 'xl' }, 'Extra large')
 ));
 const disabledLinkMarkup = renderToStaticMarkup(React.createElement(
   Button,
@@ -140,6 +141,7 @@ assert.match(markup, /bg-\[var\(--color-skeleton\)\]/);
 assert.match(buttonShapeMarkup, /class="[^"]*rounded-md[^"]*">Default shape<\/button>/);
 assert.match(buttonShapeMarkup, /class="[^"]*rounded-pill[^"]*">Pill shape<\/button>/);
 assert.match(buttonShapeMarkup, /class="[^"]*rounded-pill[^"]*" href="\/details">Pill link<\/a>/);
+assert.match(buttonShapeMarkup, /class="[^"]*box-border[^"]*min-h-14[^"]*px-6[^"]*py-3[^"]*">Extra large<\/button>/);
 assert.doesNotMatch(buttonShapeMarkup, /shape="pill"/);
 assert.match(enabledLinkMarkup, /<a[^>]*href="\/details"[^>]*>Details<\/a>/);
 assert.match(disabledLinkMarkup, /<a[^>]*aria-disabled="true"[^>]*tabindex="-1"[^>]*>Details<\/a>/);
